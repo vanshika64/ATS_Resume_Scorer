@@ -1,0 +1,107 @@
+2026-06-03 16:24:17,623-INFO-Starting ATS Resume Analyzer API...
+2026-06-03 16:24:17,623-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-03 16:24:28,891-WARNING-en_core_web_md not found - falling back to 
+2026-06-03 16:27:00,546-INFO-Starting ATS Resume Analyzer API...
+2026-06-03 16:27:00,546-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-03 16:27:04,791-INFO-Loaded en_core_web_md
+2026-06-03 16:27:04,791-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-03 16:28:34,927-INFO-Loaded all-MiniLM-L6-v2
+2026-06-03 16:28:34,928-INFO-All models loaded. API is ready to serve requests.
+2026-06-03 17:00:49,980-INFO-Starting ATS Resume Analyzer API...
+2026-06-03 17:00:49,981-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-03 17:00:56,756-INFO-Loaded en_core_web_md
+2026-06-03 17:00:56,756-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-03 17:01:15,513-INFO-Loaded all-MiniLM-L6-v2
+2026-06-03 17:01:15,514-INFO-All models loaded. API is ready to serve requests.
+2026-06-03 17:10:46,513-INFO-Starting ATS Resume Analyzer API...
+2026-06-03 17:10:46,513-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-03 17:10:53,146-INFO-Loaded en_core_web_md
+2026-06-03 17:10:53,146-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-03 17:11:24,584-INFO-Loaded all-MiniLM-L6-v2
+2026-06-03 17:11:24,584-INFO-All models loaded. API is ready to serve requests.
+2026-06-03 17:19:27,665-INFO-Starting ATS Resume Analyzer API...
+2026-06-03 17:19:27,666-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-03 17:19:35,013-INFO-Loaded en_core_web_md
+2026-06-03 17:19:35,013-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-03 17:19:53,092-INFO-Loaded all-MiniLM-L6-v2
+2026-06-03 17:19:53,092-INFO-All models loaded. API is ready to serve requests.
+2026-06-03 17:26:14,678-INFO-Starting ATS Resume Analyzer API...
+2026-06-03 17:26:14,679-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-03 17:26:22,718-INFO-Loaded en_core_web_md
+2026-06-03 17:26:22,718-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-03 17:26:40,949-INFO-Loaded all-MiniLM-L6-v2
+2026-06-03 17:26:40,949-INFO-All models loaded. API is ready to serve requests.
+2026-06-03 17:27:38,683-ERROR-File parsing failed: cannot import name 'TextExtractionError' from 'backend.utils.file_utils' (C:\Users\vansh\resumeProject\ATS_Scorer\backend\utils\file_utils.py)
+2026-06-03 17:28:52,111-ERROR-File parsing failed: cannot import name 'TextExtractionError' from 'backend.utils.file_utils' (C:\Users\vansh\resumeProject\ATS_Scorer\backend\utils\file_utils.py)
+2026-06-03 17:28:52,296-INFO-Shutting down the API!!
+2026-06-03 17:28:55,861-INFO-Starting ATS Resume Analyzer API...
+2026-06-03 17:28:55,861-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-03 17:29:02,429-INFO-Loaded en_core_web_md
+2026-06-03 17:29:02,429-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-03 17:29:22,754-INFO-Loaded all-MiniLM-L6-v2
+2026-06-03 17:29:22,754-INFO-All models loaded. API is ready to serve requests.
+2026-06-03 17:29:24,156-INFO-parse_Resume_file:parsing file :Diva_Malik_FlowCV_Resume_2026-04-08.pdf
+2026-06-03 17:29:24,371-INFO-parse_resume_file:Extracted 1966 chars from Diva_Malik_FlowCV_Resume_2026-04-08.pdf
+2026-06-03 17:29:24,371-INFO-Parsed 'Diva_Malik_FlowCV_Resume_2026-04-08.pdf': 1966 chars extracted
+2026-06-03 17:29:27,359-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-03 17:29:28,875-INFO-Groq parsed summary: ''
+2026-06-03 17:29:28,875-INFO-Groq parsed skills count: 23
+2026-06-03 17:29:28,875-INFO-Groq parsed experience count: 2
+2026-06-03 17:29:31,751-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-06-03 17:29:56,880-INFO-parse_Resume_file:parsing file :Vanshika_Dhull_FlowCV_Resume_2026-05-26.pdf
+2026-06-03 17:29:57,142-INFO-parse_resume_file:Extracted 2660 chars from Vanshika_Dhull_FlowCV_Resume_2026-05-26.pdf
+2026-06-03 17:29:57,142-INFO-Parsed 'Vanshika_Dhull_FlowCV_Resume_2026-05-26.pdf': 2660 chars extracted
+2026-06-03 17:29:59,604-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-03 17:30:01,950-INFO-Groq parsed summary: 'B.Tech Computer Science (AI & ML) student with strong foundations in Data Structures & Algorithms an'
+2026-06-03 17:30:01,951-INFO-Groq parsed skills count: 33
+2026-06-03 17:30:01,951-INFO-Groq parsed experience count: 2
+2026-06-03 17:30:05,741-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-06-03 17:30:20,498-INFO-parse_Resume_file:parsing file :Vanshika_Dhull_FlowCV_Resume_2026-05-26.pdf
+2026-06-03 17:30:20,792-INFO-parse_resume_file:Extracted 2660 chars from Vanshika_Dhull_FlowCV_Resume_2026-05-26.pdf
+2026-06-03 17:30:20,793-INFO-Parsed 'Vanshika_Dhull_FlowCV_Resume_2026-05-26.pdf': 2660 chars extracted
+2026-06-03 17:30:23,669-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-03 17:30:43,741-INFO-Groq parsed summary: 'B.Tech Computer Science (AI & ML) student with strong foundations in Data Structures & Algorithms an'
+2026-06-03 17:30:43,741-INFO-Groq parsed skills count: 33
+2026-06-03 17:30:43,742-INFO-Groq parsed experience count: 2
+2026-06-03 17:30:46,619-INFO-parse_Resume_file:parsing file :BhupendraSinghResume.pdf
+2026-06-03 17:30:46,817-INFO-parse_resume_file:Extracted 2090 chars from BhupendraSinghResume.pdf
+2026-06-03 17:30:46,817-INFO-Parsed 'BhupendraSinghResume.pdf': 2090 chars extracted
+2026-06-03 17:30:48,644-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-03 17:30:50,489-INFO-Groq parsed summary: 'Ambitious B.Tech Computer Science student skilled in C++, Data Structures & Algorithms, Machine Lear'
+2026-06-03 17:30:50,489-INFO-Groq parsed skills count: 31
+2026-06-03 17:30:50,489-INFO-Groq parsed experience count: 0
+2026-06-03 17:30:52,277-ERROR-Failed to save analysis to Supabase: 
+2026-06-03 17:30:53,463-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-06-03 17:32:56,240-INFO-Shutting down the API!!
+2026-06-04 12:05:13,261-INFO-Starting ATS Resume Analyzer API...
+2026-06-04 12:05:13,262-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-04 12:05:29,970-INFO-Loaded en_core_web_md
+2026-06-04 12:05:29,970-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-04 12:05:56,058-INFO-Loaded all-MiniLM-L6-v2
+2026-06-04 12:05:56,058-INFO-All models loaded. API is ready to serve requests.
+2026-06-04 12:10:00,886-INFO-shutting down the api!!
+2026-06-04 12:10:09,740-INFO-Starting ATS Resume Analyzer API...
+2026-06-04 12:10:09,740-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-04 12:10:17,399-INFO-Loaded en_core_web_md
+2026-06-04 12:10:17,399-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-04 12:10:35,727-INFO-Loaded all-MiniLM-L6-v2
+2026-06-04 12:10:35,728-INFO-All models loaded. API is ready to serve requests.
+2026-06-04 12:14:29,830-INFO-shutting down the api!!
+2026-06-04 12:14:37,490-INFO-Starting ATS Resume Analyzer API...
+2026-06-04 12:14:37,491-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-04 12:14:45,833-INFO-Loaded en_core_web_md
+2026-06-04 12:14:45,833-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-04 12:15:03,275-INFO-Loaded all-MiniLM-L6-v2
+2026-06-04 12:15:03,275-INFO-All models loaded. API is ready to serve requests.
+2026-06-04 12:16:10,699-INFO-parse_Resume_file:parsing file :VanshikaDhullResume.pdf
+2026-06-04 12:16:11,712-INFO-parse_resume_file:Extracted 2823 chars from VanshikaDhullResume.pdf
+2026-06-04 12:16:11,713-INFO-Parsed 'VanshikaDhullResume.pdf': 2823 chars extracted
+2026-06-04 12:16:15,468-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-04 12:16:17,512-INFO-Groq parsed summary: 'Ambitious B.Tech Computer Science student skilled in C++, Data Structures & Algorithms, Machine Lear'
+2026-06-04 12:16:17,512-INFO-Groq parsed skills count: 38
+2026-06-04 12:16:17,512-INFO-Groq parsed experience count: 2
+2026-06-04 12:16:32,567-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
