@@ -9,7 +9,7 @@ def render():
         .main-header {
             text-align: center;
             padding: 3rem 2rem;
-            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #9333EA 100%);
+            background: linear-gradient(135deg, #2563EB 0%, #0EA5E9 50%, #06B6D4 100%);
             color: white;
             border-radius: 16px;
             margin-bottom: 2rem;
