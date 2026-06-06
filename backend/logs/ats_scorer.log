@@ -105,3 +105,128 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2026-06-04 12:16:17,512-INFO-Groq parsed experience count: 2
 2026-06-04 12:16:32,567-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
 For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-06-04 12:45:39,192-INFO-shutting down the api!!
+2026-06-04 12:45:52,968-INFO-Starting ATS Resume Analyzer API...
+2026-06-04 12:45:52,969-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-04 12:46:10,828-INFO-Loaded en_core_web_md
+2026-06-04 12:46:10,829-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-04 12:46:44,433-INFO-Loaded all-MiniLM-L6-v2
+2026-06-04 12:46:44,434-INFO-All models loaded. API is ready to serve requests.
+2026-06-04 13:09:14,453-INFO-shutting down the api!!
+2026-06-04 13:47:22,550-INFO-Starting ATS Resume Analyzer API...
+2026-06-04 13:47:22,550-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-04 13:47:28,719-INFO-Loaded en_core_web_md
+2026-06-04 13:47:28,719-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-04 13:47:44,561-INFO-Loaded all-MiniLM-L6-v2
+2026-06-04 13:47:44,561-INFO-All models loaded. API is ready to serve requests.
+2026-06-04 13:47:55,949-INFO-parse_Resume_file:parsing file :ResumeVanshikaDhull.pdf
+2026-06-04 13:47:56,631-INFO-parse_resume_file:Extracted 2567 chars from ResumeVanshikaDhull.pdf
+2026-06-04 13:47:56,632-INFO-Parsed 'ResumeVanshikaDhull.pdf': 2567 chars extracted
+2026-06-04 13:47:59,247-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-04 13:48:00,949-INFO-Groq parsed summary: 'Ambitious B.Tech Computer Science student skilled in C++, Data Structures & Algorithms, Machine Lear'
+2026-06-04 13:48:00,949-INFO-Groq parsed skills count: 36
+2026-06-04 13:48:00,949-INFO-Groq parsed experience count: 2
+2026-06-04 13:48:05,853-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-06-04 13:56:46,829-INFO-parse_Resume_file:parsing file :ResumeVanshikaDhull.pdf
+2026-06-04 13:56:47,769-INFO-parse_resume_file:Extracted 2567 chars from ResumeVanshikaDhull.pdf
+2026-06-04 13:56:47,771-INFO-Parsed 'ResumeVanshikaDhull.pdf': 2567 chars extracted
+2026-06-04 13:56:49,641-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-04 13:56:51,674-INFO-Groq parsed summary: 'Ambitious B.Tech Computer Science student skilled in C++, Data Structures & Algorithms, Machine Lear'
+2026-06-04 13:56:51,674-INFO-Groq parsed skills count: 36
+2026-06-04 13:56:51,674-INFO-Groq parsed experience count: 2
+2026-06-04 13:56:56,187-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-06-04 13:57:43,312-INFO-shutting down the api!!
+2026-06-04 16:36:37,583-INFO-Starting ATS Resume Analyzer API...
+2026-06-04 16:36:37,586-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-04 16:36:45,139-INFO-Loaded en_core_web_md
+2026-06-04 16:36:45,139-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-04 16:37:04,484-INFO-Loaded all-MiniLM-L6-v2
+2026-06-04 16:37:04,484-INFO-All models loaded. API is ready to serve requests.
+2026-06-04 16:38:09,734-INFO-parse_Resume_file:parsing file :Vanshika_Dhull_FlowCV_Resume_2026-05-26.pdf
+2026-06-04 16:38:09,998-INFO-parse_resume_file:Extracted 2660 chars from Vanshika_Dhull_FlowCV_Resume_2026-05-26.pdf
+2026-06-04 16:38:09,999-INFO-Parsed 'Vanshika_Dhull_FlowCV_Resume_2026-05-26.pdf': 2660 chars extracted
+2026-06-04 16:38:12,690-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-04 16:38:14,715-INFO-Groq parsed summary: 'B.Tech Computer Science (AI & ML) student with strong foundations in Data Structures & Algorithms an'
+2026-06-04 16:38:14,716-INFO-Groq parsed skills count: 33
+2026-06-04 16:38:14,716-INFO-Groq parsed experience count: 2
+2026-06-04 16:38:18,398-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-06-04 17:14:39,978-INFO-shutting down the api!!
+2026-06-04 17:14:46,709-INFO-Starting ATS Resume Analyzer API...
+2026-06-04 17:14:46,709-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-04 17:14:59,760-INFO-Loaded en_core_web_md
+2026-06-04 17:14:59,760-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-04 17:15:20,464-INFO-Loaded all-MiniLM-L6-v2
+2026-06-04 17:15:20,464-INFO-All models loaded. API is ready to serve requests.
+2026-06-05 18:37:45,051-INFO-Starting ATS Resume Analyzer API...
+2026-06-05 18:37:45,052-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-05 18:37:57,446-INFO-Loaded en_core_web_md
+2026-06-05 18:37:57,447-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-05 18:38:27,751-INFO-Loaded all-MiniLM-L6-v2
+2026-06-05 18:38:27,751-INFO-All models loaded. API is ready to serve requests.
+2026-06-05 18:41:58,428-INFO-shutting down the api!!
+2026-06-05 18:42:06,776-INFO-Starting ATS Resume Analyzer API...
+2026-06-05 18:42:06,776-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-05 18:42:17,929-INFO-Loaded en_core_web_md
+2026-06-05 18:42:17,929-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-05 18:43:04,049-INFO-Loaded all-MiniLM-L6-v2
+2026-06-05 18:43:04,049-INFO-All models loaded. API is ready to serve requests.
+2026-06-05 18:43:07,346-INFO-Starting ATS Resume Analyzer API...
+2026-06-05 18:43:07,346-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-05 18:43:13,749-INFO-Loaded en_core_web_md
+2026-06-05 18:43:13,749-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-05 18:43:35,160-INFO-Loaded all-MiniLM-L6-v2
+2026-06-05 18:43:35,160-INFO-All models loaded. API is ready to serve requests.
+2026-06-05 19:01:12,926-INFO-parse_Resume_file:parsing file :VanshikaDhullGenAI.pdf
+2026-06-05 19:01:13,843-INFO-parse_resume_file:Extracted 2660 chars from VanshikaDhullGenAI.pdf
+2026-06-05 19:01:13,844-INFO-Parsed 'VanshikaDhullGenAI.pdf': 2660 chars extracted
+2026-06-05 19:01:28,827-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-05 19:01:30,949-INFO-Groq parsed summary: 'B.Tech Computer Science (AI & ML) student with strong foundations in Data Structures & Algorithms an'
+2026-06-05 19:01:30,950-INFO-Groq parsed skills count: 33
+2026-06-05 19:01:30,950-INFO-Groq parsed experience count: 2
+2026-06-05 19:01:34,944-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-06-05 19:01:35,052-INFO-shutting down the api!!
+2026-06-05 19:01:41,129-INFO-Starting ATS Resume Analyzer API...
+2026-06-05 19:01:41,129-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-05 19:01:56,631-INFO-Loaded en_core_web_md
+2026-06-05 19:01:56,631-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-05 19:02:35,278-INFO-Loaded all-MiniLM-L6-v2
+2026-06-05 19:02:35,279-INFO-All models loaded. API is ready to serve requests.
+2026-06-05 19:02:47,435-ERROR-Failed to generate PDF: WeasyPrint is not installed. PDF generation unavailable.
+2026-06-05 19:02:47,446-ERROR-Failed to generate PDF: WeasyPrint is not installed. PDF generation unavailable.
+2026-06-05 20:49:05,366-INFO-parse_Resume_file:parsing file :VanshikaDhullGenAI.pdf
+2026-06-05 20:49:06,243-INFO-parse_resume_file:Extracted 2660 chars from VanshikaDhullGenAI.pdf
+2026-06-05 20:49:06,245-INFO-Parsed 'VanshikaDhullGenAI.pdf': 2660 chars extracted
+2026-06-05 20:49:09,221-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-05 20:49:11,299-INFO-Groq parsed summary: 'B.Tech Computer Science (AI & ML) student with strong foundations in Data Structures & Algorithms an'
+2026-06-05 20:49:11,299-INFO-Groq parsed skills count: 33
+2026-06-05 20:49:11,299-INFO-Groq parsed experience count: 2
+2026-06-05 20:49:28,192-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-06-05 20:49:43,098-ERROR-Failed to generate PDF: WeasyPrint is not installed. PDF generation unavailable.
+2026-06-05 20:51:18,226-ERROR-Failed to generate PDF: WeasyPrint is not installed. PDF generation unavailable.
+2026-06-05 20:51:18,511-INFO-shutting down the api!!
+2026-06-05 20:51:30,863-INFO-Starting ATS Resume Analyzer API...
+2026-06-05 20:51:30,864-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-05 20:51:40,472-INFO-Loaded en_core_web_md
+2026-06-05 20:51:40,472-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-05 20:52:16,132-INFO-Loaded all-MiniLM-L6-v2
+2026-06-05 20:52:16,132-INFO-All models loaded. API is ready to serve requests.
+2026-06-05 20:52:21,463-INFO-Starting ATS Resume Analyzer API...
+2026-06-05 20:52:21,464-INFO-Loading spaCy NLP model: en_core_web_md
+2026-06-05 20:52:34,475-INFO-Loaded en_core_web_md
+2026-06-05 20:52:34,476-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-06-05 20:53:12,784-INFO-Loaded all-MiniLM-L6-v2
+2026-06-05 20:53:12,784-INFO-All models loaded. API is ready to serve requests.
+2026-06-05 20:53:14,704-INFO-parse_Resume_file:parsing file :VanshikaDhullGenAI.pdf
+2026-06-05 20:53:14,951-INFO-parse_resume_file:Extracted 2660 chars from VanshikaDhullGenAI.pdf
+2026-06-05 20:53:14,951-INFO-Parsed 'VanshikaDhullGenAI.pdf': 2660 chars extracted
+2026-06-05 20:53:18,411-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-06-05 20:53:21,357-INFO-Groq parsed summary: 'B.Tech Computer Science (AI & ML) student with strong foundations in Data Structures & Algorithms an'
+2026-06-05 20:53:21,357-INFO-Groq parsed skills count: 33
+2026-06-05 20:53:21,357-INFO-Groq parsed experience count: 2
+2026-06-05 20:53:25,248-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
