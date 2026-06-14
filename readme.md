@@ -57,12 +57,10 @@ Result:
 
 Compares resumes with job descriptions using:
 
-* Sentence Transformers
 * Semantic Similarity
 * Keyword Matching
 
 Provides:
-
 * Match Percentage
 * Missing Keywords
 * Matched Keywords
@@ -90,7 +88,6 @@ Creates professional PDF reports containing:
 ### User History
 
 Stores previous analyses using Supabase.
-
 ---
 
 ## Tech Stack
@@ -159,12 +156,6 @@ POST /api/v1/analyze-resume
 Uploads a resume and generates ATS analysis.
 
 ---
-
-### Health Check
-
-```http
-GET /api/v1/health
-```
 
 Checks API and model status.
 
@@ -252,23 +243,6 @@ Swagger Documentation:
 ```text
 http://localhost:8000/docs
 ```
-
----
-
-## Example Workflow
-
-1. Upload Resume (PDF/DOCX)
-2. Extract Resume Text
-3. Parse Resume Using Groq LLM
-4. Validate Skills Against Projects
-5. Compare Resume With Job Description
-6. Calculate ATS Score
-7. Generate Detailed Feedback
-8. Store Results In Supabase
-9. Export PDF Report
-
----
-
 ## Future Improvements
 
 * Grammar Checking
