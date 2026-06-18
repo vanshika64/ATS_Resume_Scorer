@@ -452,7 +452,7 @@ def generate_improvements(
 
     return improvements
 
-#Interpretation of overall score
+#Interpretation of overall score till now
 def _generate_score_interpretation(overall_score: float) -> str:
     if overall_score >= 90:    return 'Excellent! Your resume is highly optimized for ATS systems.'
     elif overall_score >= 80:  return 'Great! Your resume should perform well with most ATS systems.'
