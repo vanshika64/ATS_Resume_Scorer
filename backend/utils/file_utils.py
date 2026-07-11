@@ -31,7 +31,7 @@ class FileUploadError(ATSBaseError):
     pass
 class FileParsingError(ATSBaseError):
     pass
-class TextExtractError(ATSBaseError):
+class TextExtractionError(ATSBaseError):
     pass
 def log_error(error: Exception,context: Optional[str]=None,**kwargs)->None:
     """Log an error simply."""
@@ -58,7 +58,7 @@ def with_fallback(primary_func:Callable[...,T],fallback_func:Callable[...,T],*ar
         except Exception as fallback_error:
             log_error(fallback_error,context="fallback")
             raise
-def get_default_grammer_results()->Dict:
+def get_default_grammar_results()->Dict:
     return {
         'total_errors': 0,
         'critical_errors':[],
@@ -70,7 +70,7 @@ def get_default_grammer_results()->Dict:
         '_component_status':'unavailable',
         '_note':'Grammer checking unavailable.'
     }
-def get_dafault_location_results()->Dict:
+def get_default_location_results()->Dict:
     return {
         'location_found':False,
         'detected_locations':[],
