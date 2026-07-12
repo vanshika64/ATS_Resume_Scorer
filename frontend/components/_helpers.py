@@ -2,35 +2,32 @@ from typing import Tuple
 
 
 def get_score_color(score: float) -> Tuple[str, str]:
-    """Return (text_color, background_color) for a 0–100 score."""
+    """Return dark-theme foreground and background colours for a score."""
     if score >= 80:
-        return "#2e7d32", "#e8f5e9"  # green
+        return "#9ed8af", "#213a2b"
     if score >= 60:
-        return "#f57c00", "#fff3e0"  # orange
-    return "#c62828", "#ffebee"      # red
+        return "#f0c070", "#43331e"
+    return "#f09a90", "#442927"
 
 
 def get_score_emoji(score: float) -> str:
-    """Emoji that matches the score band — used in headlines."""
+    """Return a compact status marker for the overall score."""
     if score >= 90:
-        return "🌟"
+        return "\u2b50"
     if score >= 80:
-        return "✅"
+        return "\u2705"
     if score >= 70:
-        return "👍"
+        return "\U0001f44d"
     if score >= 60:
-        return "⚠️"
-    return "🔴"
+        return "\u26a0\ufe0f"
+    return "\U0001f534"
 
 
 def get_severity_style(severity: str) -> Tuple[str, str, str]:
-    """
-    Return (icon, text_color, background_color) for an IssueDetail severity.
-    Matches the values the backend emits in `detailed_feedback[].severity_level`.
-    """
+    """Return a marker plus dark-theme foreground and background colours."""
     level = (severity or "").lower()
     if level in ("critical", "high"):
-        return "🔴", "#c62828", "#ffebee"
+        return "\U0001f534", "#f09a90", "#442927"
     if level == "medium":
-        return "🟡", "#f57c00", "#fff3e0"
-    return "🟢", "#2e7d32", "#e8f5e9"
+        return "\U0001f7e1", "#f0c070", "#43331e"
+    return "\U0001f7e2", "#9ed8af", "#213a2b"

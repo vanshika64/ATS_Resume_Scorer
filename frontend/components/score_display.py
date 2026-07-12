@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 import streamlit as st
 
-from frontend.components._helpers import get_score_color, get_score_emoji
+from frontend.components._helpers import get_score_emoji
 
 
 # Component max scores match backend/core/config.py SCORE_WEIGHTS.
@@ -20,7 +20,7 @@ def display_overall_score(analysis: Dict[str, Any]) -> None:
     """Big colored score card with a short interpretation line."""
     score = float(analysis.get("ATS_score", analysis.get("ats_score", 0)))
     interpretation = analysis.get("interpretation", "")
-    text_color, bg_color = get_score_color(score)
+    score_tone = "excellent" if score >= 80 else "good" if score >= 60 else "needs"
     emoji = get_score_emoji(score)
 
     st.markdown("##  Analysis Results")
@@ -28,13 +28,12 @@ def display_overall_score(analysis: Dict[str, Any]) -> None:
     with mid:
         st.markdown(
             f"""
-            <div style="text-align:center; padding:1rem; background-color:{bg_color};
-                        border-radius:15px; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
-                <h1 style="color:{text_color}; font-size:3rem; margin:0; font-weight:bold; line-height:1;">
+            <div class="score-card">
+                <h1 class="score-card-value score-tone-{score_tone}">
                     {emoji} {score:.0f}
                 </h1>
-                <h3 style="color:{text_color};">Overall ATS Score</h3>
-                <p style="color:#666; margin-top:0.2rem;">{interpretation}</p>
+                <h3 class="score-card-title">Overall ATS Score</h3>
+                <p class="score-card-copy">{interpretation}</p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -50,16 +49,13 @@ def display_score_breakdown(analysis: Dict[str, Any]) -> None:
     for i, (label, key, max_score, icon) in enumerate(COMPONENTS):
         value = float(component_scores.get(key, 0))
         percentage = value / max_score if max_score else 0
-        bar_color = "green" if percentage >= 0.8 else "orange" if percentage >= 0.6 else "red"
+        bar_tone = "is-good" if percentage >= 0.8 else "is-warning" if percentage >= 0.6 else "is-poor"
 
         with left if i % 2 == 0 else right:
             st.markdown(f"**{icon} {label}**")
             st.markdown(
                 f"""
-                <div style="background-color:#e0e0e0; border-radius:10px; height:20px; margin-bottom:5px;">
-                    <div style="background-color:{bar_color}; width:{percentage * 100}%;
-                                height:100%; border-radius:10px; transition:width 0.5s;"></div>
-                </div>
+                <progress class="score-breakdown-progress {bar_tone}" max="1" value="{percentage}"></progress>
                 """,
                 unsafe_allow_html=True,
             )

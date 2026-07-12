@@ -1,101 +1,112 @@
 import streamlit as st
 
 
-def render():
-    
-    # Landing page CSS
+def render() -> None:
+    """Render the product landing page."""
+
     st.markdown("""
-    <style>
-        .main-header {
-            text-align: center;
-            padding: 3rem 2rem;
-            background: linear-gradient(135deg, #1A1A1A 0%, #000000 100%);
-            color: #FFFFFF;
-            border: 1px solid #2A2A2A;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-        .main-header h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: #FFFFFF;
-        }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # Hero Section
-    st.markdown("""
-    <div class="main-header">
-        <h1> ATS Resume Vision</h1>
-        <h3>Optimize Your Resume for Applicant Tracking Systems</h3>
-        <p>Get instant feedback on your resume's ATS compatibility with AI-powered analysis</p>
+    <div class="hero-panel">
+        <div class="hero-eyebrow">Smarter job applications</div>
+        <h1 class="hero-title">Put your best resume forward.</h1>
+        <p class="hero-copy">
+            Get clear, practical feedback on your resume's ATS compatibility
+            and focus your next edit where it matters most.
+        </p>
     </div>
     """, unsafe_allow_html=True)
-    
-    # Call-to-Action Button
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("🚀 Start Analyzing Your Resume", use_container_width=True):
-            st.session_state.current_view = 'scorer'
+
+    _, center, _ = st.columns([1, 2, 1])
+
+    with center:
+        if st.button(
+            "Start analyzing your resume",
+            use_container_width=True,
+            type="primary"
+        ):
+            st.session_state.current_view = "scorer"
             st.rerun()
-    
-    st.markdown("---")
-    
-    # Features Overview
-    st.markdown("##  AI-Powered Features")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
+
+    st.markdown(
+        "<div class='section-kicker'>How it helps</div>",
+        unsafe_allow_html=True,
+    )
+    st.markdown("## Resume feedback that is easy to act on")
+
+    first, second, third = st.columns(3)
+
+    with first:
         st.markdown("""
-        ###  Comprehensive Scoring
-        Get detailed scores across 5 key dimensions:
-        - Formatting (20%)
-        - Keywords & Skills (25%)
-        - Content Quality (25%)
-        - Skill Validation (15%)
-        - ATS Compatibility (15%)
-        """)
-    
-    with col2:
+        <div class="feature-card">
+            <h3>Comprehensive scoring</h3>
+            <p>See how every part of your resume performs.</p>
+            <ul>
+                <li>Formatting</li>
+                <li>Keywords &amp; skills</li>
+                <li>Content quality</li>
+                <li>ATS compatibility</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with second:
         st.markdown("""
-        ###  Skill Validation
-        Verify that your claimed skills are demonstrated in your projects and experience using AI-powered semantic analysis.
-        
-        **No more empty claims!**
-        """)
-    
-    with col3:
+        <div class="feature-card">
+            <h3>Skill validation</h3>
+            <p>
+                Check whether your claimed skills are actually
+                demonstrated in your projects and experience.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with third:
         st.markdown("""
-        ###  Privacy First
-        All analysis runs locally with no external API calls. Your resume data never leaves your system.
-        
-        **100% Private & Secure**
-        """)
-    
-    st.markdown("---")
-    
-    # How It Works
-    st.markdown("##  How It Works")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
+        <div class="feature-card">
+            <h3>Privacy first</h3>
+            <p>
+                Your analysis stays private, giving you room
+                to improve confidently before you apply.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown(
+        "<br><div class='section-kicker'>Simple process</div>",
+        unsafe_allow_html=True,
+    )
+    st.markdown("## From upload to next steps")
+
+    one, two, three = st.columns(3)
+
+    with one:
         st.markdown("""
-        #### 1️.) Upload Your Resume
-        Support for PDF, DOC, and DOCX formats
-        """)
-    
-    with col2:
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Upload</h3>
+            <p>Add your PDF, DOC, or DOCX resume.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with two:
         st.markdown("""
-        #### 2️.) AI Analysis
-        Our local AI models analyze your resume across multiple dimensions
-        """)
-    
-    with col3:
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Analyze</h3>
+            <p>
+                Review your resume across the dimensions
+                that matter to ATS systems.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with three:
         st.markdown("""
-        #### 3️.) Get Actionable Feedback
-        Receive detailed recommendations to improve your resume
-        """)
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Improve</h3>
+            <p>
+                Use clear recommendations to make your
+                next revision count.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)

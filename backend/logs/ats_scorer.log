@@ -1082,3 +1082,213 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2026-07-11 17:50:19,665-INFO-Loaded all-MiniLM-L6-v2
 2026-07-11 17:50:19,665-INFO-All models loaded. API is ready to serve requests.
 2026-07-11 17:56:26,977-INFO-shutting down the api!!
+2026-07-12 14:02:26,868-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 14:02:26,869-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 14:02:51,441-INFO-Loaded en_core_web_md
+2026-07-12 14:02:51,441-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 14:03:32,847-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 14:03:32,847-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 14:21:31,212-INFO-parse_Resume_file:parsing file :shivangi_bennett_resume.pdf
+2026-07-12 14:21:32,602-INFO-parse_resume_file:Extracted 2714 chars from shivangi_bennett_resume.pdf
+2026-07-12 14:21:32,602-INFO-Parsed 'shivangi_bennett_resume.pdf': 2714 chars extracted
+2026-07-12 14:21:36,195-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-07-12 14:21:37,554-INFO-Groq parsed summary: 'Ambitious and focused Computer Science student capable of working in dynamic environments and meetin'
+2026-07-12 14:21:37,555-INFO-Groq parsed skills count: 21
+2026-07-12 14:21:37,555-INFO-Groq parsed experience count: 0
+2026-07-12 14:21:46,674-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-07-12 19:08:48,374-INFO-parse_Resume_file:parsing file :shivangi_bennett_resume.pdf
+2026-07-12 19:08:48,661-INFO-parse_resume_file:Extracted 2714 chars from shivangi_bennett_resume.pdf
+2026-07-12 19:08:48,661-INFO-Parsed 'shivangi_bennett_resume.pdf': 2714 chars extracted
+2026-07-12 19:08:50,578-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-07-12 19:08:51,981-INFO-Groq parsed summary: 'Ambitious and focused Computer Science student capable of working in dynamic environments and meetin'
+2026-07-12 19:08:51,981-INFO-Groq parsed skills count: 21
+2026-07-12 19:08:51,981-INFO-Groq parsed experience count: 0
+2026-07-12 19:08:57,925-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 19:08:57,926-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 19:09:04,556-INFO-Loaded en_core_web_md
+2026-07-12 19:09:04,556-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 19:09:49,203-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 19:09:49,203-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 19:11:07,689-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 19:11:07,689-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 19:11:14,312-INFO-Loaded en_core_web_md
+2026-07-12 19:11:14,313-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 19:11:31,838-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 19:11:31,838-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 19:14:39,576-INFO-parse_Resume_file:parsing file :shivangi_bennett_resume.pdf
+2026-07-12 19:14:40,909-INFO-parse_resume_file:Extracted 2714 chars from shivangi_bennett_resume.pdf
+2026-07-12 19:14:40,910-INFO-Parsed 'shivangi_bennett_resume.pdf': 2714 chars extracted
+2026-07-12 19:14:42,765-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-07-12 19:14:44,058-INFO-Groq parsed summary: 'Ambitious and focused Computer Science student capable of working in dynamic environments and meetin'
+2026-07-12 19:14:44,059-INFO-Groq parsed skills count: 21
+2026-07-12 19:14:44,059-INFO-Groq parsed experience count: 0
+2026-07-12 19:14:47,202-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-07-12 21:48:56,849-INFO-shutting down the api!!
+2026-07-12 21:49:07,881-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 21:49:07,881-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 21:49:26,037-INFO-Loaded en_core_web_md
+2026-07-12 21:49:26,037-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 21:49:40,487-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 21:49:40,487-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 21:49:40,591-INFO-shutting down the api!!
+2026-07-12 21:49:43,023-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 21:49:43,023-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 21:49:47,516-INFO-Loaded en_core_web_md
+2026-07-12 21:49:47,516-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 21:50:00,141-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 21:50:00,141-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:02:37,291-INFO-shutting down the api!!
+2026-07-12 22:02:42,514-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:02:42,514-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:02:49,947-INFO-Loaded en_core_web_md
+2026-07-12 22:02:49,948-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:03:04,425-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:03:04,426-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:03:04,539-INFO-shutting down the api!!
+2026-07-12 22:03:06,929-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:03:06,929-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:03:11,019-INFO-Loaded en_core_web_md
+2026-07-12 22:03:11,019-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:03:22,951-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:03:22,951-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:03:23,061-INFO-shutting down the api!!
+2026-07-12 22:03:26,986-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:03:26,986-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:03:32,338-INFO-Loaded en_core_web_md
+2026-07-12 22:03:32,338-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:03:43,129-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:03:43,129-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:04:21,624-INFO-shutting down the api!!
+2026-07-12 22:04:24,109-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:04:24,109-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:04:29,016-INFO-Loaded en_core_web_md
+2026-07-12 22:04:29,016-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:04:48,012-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:04:48,012-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:04:48,123-INFO-shutting down the api!!
+2026-07-12 22:04:50,780-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:04:50,780-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:04:55,600-INFO-Loaded en_core_web_md
+2026-07-12 22:04:55,600-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:05:06,377-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:05:06,377-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:23:52,445-INFO-shutting down the api!!
+2026-07-12 22:24:03,982-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:24:03,982-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:24:17,283-INFO-Loaded en_core_web_md
+2026-07-12 22:24:17,283-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:24:35,370-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:24:35,370-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:24:35,483-INFO-shutting down the api!!
+2026-07-12 22:24:38,410-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:24:38,410-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:24:44,390-INFO-Loaded en_core_web_md
+2026-07-12 22:24:44,390-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:24:55,943-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:24:55,943-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:24:56,063-INFO-shutting down the api!!
+2026-07-12 22:24:57,864-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:24:57,864-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:25:02,397-INFO-Loaded en_core_web_md
+2026-07-12 22:25:02,397-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:25:14,275-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:25:14,275-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:25:14,397-INFO-shutting down the api!!
+2026-07-12 22:25:18,960-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:25:18,960-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:25:22,958-INFO-Loaded en_core_web_md
+2026-07-12 22:25:22,958-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:25:34,546-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:25:34,546-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:25:34,655-INFO-shutting down the api!!
+2026-07-12 22:25:36,983-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:25:36,984-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:25:46,976-INFO-Loaded en_core_web_md
+2026-07-12 22:25:46,976-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:26:11,224-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:26:11,224-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:28:05,967-INFO-shutting down the api!!
+2026-07-12 22:28:10,124-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:28:10,125-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:28:18,047-INFO-Loaded en_core_web_md
+2026-07-12 22:28:18,047-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:28:36,318-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:28:36,319-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:28:36,424-INFO-shutting down the api!!
+2026-07-12 22:28:38,979-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:28:38,981-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:28:44,103-INFO-Loaded en_core_web_md
+2026-07-12 22:28:44,104-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:28:57,357-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:28:57,357-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:28:57,472-INFO-shutting down the api!!
+2026-07-12 22:29:00,303-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:29:00,303-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:29:04,498-INFO-Loaded en_core_web_md
+2026-07-12 22:29:04,506-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:29:48,778-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:29:48,779-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:29:48,935-INFO-shutting down the api!!
+2026-07-12 22:29:55,660-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:29:55,660-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:30:04,546-INFO-Loaded en_core_web_md
+2026-07-12 22:30:04,546-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:30:37,146-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:30:37,146-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:30:37,263-INFO-shutting down the api!!
+2026-07-12 22:30:40,379-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:30:40,379-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:30:48,104-INFO-Loaded en_core_web_md
+2026-07-12 22:30:48,105-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:31:20,500-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:31:20,501-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:35:08,356-INFO-shutting down the api!!
+2026-07-12 22:35:15,028-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:35:15,028-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:35:29,846-INFO-Loaded en_core_web_md
+2026-07-12 22:35:29,846-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:35:43,108-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:35:43,108-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:35:43,209-INFO-shutting down the api!!
+2026-07-12 22:35:45,501-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:35:45,501-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:35:51,293-INFO-Loaded en_core_web_md
+2026-07-12 22:35:51,294-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:36:05,554-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:36:05,554-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:36:12,015-INFO-shutting down the api!!
+2026-07-12 22:36:14,391-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:36:14,392-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:36:19,467-INFO-Loaded en_core_web_md
+2026-07-12 22:36:19,467-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:36:51,333-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:36:51,334-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:36:56,555-INFO-Loaded en_core_web_md
+2026-07-12 22:36:56,555-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:37:08,711-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:37:08,711-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:39:03,067-INFO-shutting down the api!!
+2026-07-12 22:39:05,264-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:39:05,264-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:39:10,035-INFO-Loaded en_core_web_md
+2026-07-12 22:39:10,035-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:39:23,523-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:39:23,523-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 22:39:33,719-INFO-shutting down the api!!
+2026-07-12 22:39:35,575-INFO-Starting ATS Resume Analyzer API...
+2026-07-12 22:39:35,575-INFO-Loading spaCy NLP model: en_core_web_md
+2026-07-12 22:39:39,430-INFO-Loaded en_core_web_md
+2026-07-12 22:39:39,430-INFO-Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-12 22:39:54,704-INFO-Loaded all-MiniLM-L6-v2
+2026-07-12 22:39:54,704-INFO-All models loaded. API is ready to serve requests.
+2026-07-12 23:08:30,993-INFO-parse_Resume_file:parsing file :shivangi_bennett_resume.pdf
+2026-07-12 23:08:33,144-INFO-parse_resume_file:Extracted 2714 chars from shivangi_bennett_resume.pdf
+2026-07-12 23:08:33,145-INFO-Parsed 'shivangi_bennett_resume.pdf': 2714 chars extracted
+2026-07-12 23:08:36,157-WARNING-Groq resume parse: first attempt returned invalid JSON, retrying...
+2026-07-12 23:08:37,477-INFO-Groq parsed summary: 'Ambitious and focused Computer Science student capable of working in dynamic environments and meetin'
+2026-07-12 23:08:37,478-INFO-Groq parsed skills count: 21
+2026-07-12 23:08:37,478-INFO-Groq parsed experience count: 0
+2026-07-12 23:08:40,834-ERROR-Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://zadicoyomapwkhjriuao.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401

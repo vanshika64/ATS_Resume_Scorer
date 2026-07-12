@@ -1,3 +1,4 @@
+from html import escape
 from typing import Any, Dict, List
 
 import streamlit as st
@@ -17,7 +18,8 @@ def _group_by_severity(issues: List[Dict[str, Any]]) -> Dict[str, List[Dict[str,
 
 
 def _render_issue(issue: Dict[str, Any]) -> None:
-    icon, text_color, bg_color = get_severity_style(issue.get("severity_level"))
+    icon, _, _ = get_severity_style(issue.get("severity_level"))
+    severity = (issue.get("severity_level") or "low").lower()
     title = issue.get("issue_title", "Untitled issue")
     impact = issue.get("ats_impact", "")
     explanation = issue.get("explanation", "")
@@ -28,10 +30,9 @@ def _render_issue(issue: Dict[str, Any]) -> None:
 
     st.markdown(
         f"""
-        <div style="border-left:4px solid {text_color}; background-color:{bg_color};
-                    padding:0.75rem 1rem; border-radius:6px; margin-bottom:0.5rem;">
-            <strong style="color:{text_color};">{icon} {title}</strong>
-            <span style="color:#666; margin-left:0.5rem; font-size:0.85rem;">{impact}</span>
+        <div class="feedback-issue is-{escape(severity)}">
+            <strong class="feedback-issue-title">{icon} {escape(title)}</strong>
+            <span class="feedback-issue-impact">{escape(impact)}</span>
         </div>
         """,
         unsafe_allow_html=True,

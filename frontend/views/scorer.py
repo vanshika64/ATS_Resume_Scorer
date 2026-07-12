@@ -110,14 +110,7 @@ def _render_upload_area(analysis_mode: str):
         else:
             st.markdown("### 📋 Job Description")
             st.markdown("""
-            <div style="
-                background:#111111;
-                color:white;
-                padding:12px;
-                border-radius:10px;
-                margin-top: 2rem;
-                font-size:16px;
-            ">
+            <div class="status-note spaced">
              Switch to 'Job Description Comparison' mode to enable JD matching.
             </div>
             """, unsafe_allow_html=True)
@@ -165,9 +158,9 @@ def _render_export_buttons(analysis: dict) -> None:
 
 def render() -> None:
     st.title(" ATS Resume Vision")
-    st.markdown("Upload your resume — and optionally a job description — for a comprehensive analysis.")
+    st.markdown("<div class='scorer-intro'>Upload your resume and, if useful, a job description for a clear ATS-focused review.</div>", unsafe_allow_html=True)
 
-    with st.sidebar:
+    with st.container():
         st.markdown("---")
         st.markdown("## 📊 Analysis Options")
         st.info(
@@ -191,13 +184,7 @@ def render() -> None:
 
     if not resume_file:
         st.markdown("""
-        <div style="
-            background:#111111;
-            color:white;
-            padding:12px;
-            border-radius:10px;
-            font-size:16px;
-        ">
+        <div class="status-note">
         👆 Upload your resume to begin.
         </div>
         """, unsafe_allow_html=True)
@@ -242,15 +229,7 @@ def render() -> None:
 
     st.session_state["scorer_analysis"] = analysis
     st.markdown("""
-    <div style="
-        background-color: #000000;
-        color: white;
-        padding: 14px 18px;
-        border-radius: 10px;
-        border: 1px solid #333;
-        font-weight: 600;
-        font-size: 16px;
-    ">
+    <div class="status-note success">
          Analysis Complete!
     </div>
     """, unsafe_allow_html=True)
