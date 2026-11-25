@@ -21,6 +21,25 @@ class SkillValidationDetails(BaseModel):
     total: int = 0
     validated_count: int = 0
     validation_pct: float = 0.0
+    skills: List[Dict[str, Any]] = []
+    evidence_coverage_pct: float = 0.0
+
+class ScoreExplanation(BaseModel):
+    category: str
+    obtained_score: float
+    maximum_score: float
+    reason: str = ""
+    deductions: List[Dict[str, Any]] = []
+    missing_elements: List[str] = []
+    suggestions: List[str] = []
+    evidence: List[str] = []
+
+class ProjectRecommendationRequest(BaseModel):
+    target_role: str = ""
+    skills: List[str] = []
+    projects: List[Dict[str, Any]] = []
+    skill_details: List[Dict[str, Any]] = []
+    jd_gaps: List[str] = []
 
 class IssueDetail(BaseModel):
     issue_title: str
@@ -51,3 +70,9 @@ class AnalysisResponse(BaseModel):
     jd_comparison: Optional[JDComparison] = None
     warnings: List[str] = []
     interpretation: str = ""
+    score_explanations: List[ScoreExplanation] = []
+    overall_score_explanation: Dict[str, Any] = {}
+    project_recommendations: List[Dict[str, Any]] = []
+    target_role: str = ""
+    recommendations_source: str = ""
+    projects: List[Dict[str, Any]] = []

@@ -28,17 +28,38 @@ def analyze_resume(
     resume_file,
     access_token: str,
     job_description: str = "",
+    target_role: str = "",
 ) -> Dict[str, Any]:
     files = {
         "resume": (resume_file.name, resume_file.getvalue(), resume_file.type),
     }
-    data = {"job_description": job_description}
+    data = {"job_description": job_description, "target_role": target_role}
     response = requests.post(
         f"{_backend_url()}/api/v1/analyze-resume",
         files=files,
         data=data,
         headers=_auth_headers(access_token),
         timeout=180,
+    )
+    response.raise_for_status()
+    return response.json()
+
+
+def regenerate_project_recommendations(
+    analysis: Dict[str, Any], target_role: str, access_token: str,
+) -> Dict[str, Any]:
+    payload = {
+        "target_role": target_role,
+        "skills": analysis.get("skills", []),
+        "projects": analysis.get("projects", []),
+        "skill_details": (analysis.get("skill_validation_details") or {}).get("skills", []),
+        "jd_gaps": (analysis.get("jd_comparison") or analysis.get("jd_match_analysis") or {}).get("skills_gap", []),
+    }
+    response = requests.post(
+        f"{_backend_url()}/api/v1/project-recommendations",
+        json=payload,
+        headers=_auth_headers(access_token),
+        timeout=60,
     )
     response.raise_for_status()
     return response.json()

@@ -5,7 +5,9 @@ from backend.models.schemas import IssueDetail
 from backend.services.groq_parser import parse_resume, parse_job_description
 from backend.services.jd_matcher import compare_resume_with_jd
 from backend.services.feedback_engine import analyze_issues, generate_issues_summary
-from backend.services.ats_scorer import calculate_overall_score, validate_skills_with_projects
+from backend.services.ats_scorer import calculate_overall_score
+from backend.services.skill_evidence import classify_skills
+from backend.services.project_recommender import recommend_projects
 
 
 def analyze_full_resume(
@@ -13,6 +15,7 @@ def analyze_full_resume(
     nlp: spacy.Language,
     embedder: SentenceTransformer,
     job_description: Optional[str] = None,
+    target_role: Optional[str] = None,
 ) -> Dict:
     import logging
     logger = logging.getLogger('ats_resume_scorer')
@@ -39,15 +42,9 @@ def analyze_full_resume(
         'github':    parsed_resume.get('github'),
         'portfolio': None,
     }
-    skill_validation = validate_skills_with_projects(
-        skills=skills,
-        projects=projects,
-        experience_entries=parsed_resume.get('experience', []),
-        embedder=embedder,
-    )
-
     jd_comparison_result = None
     jd_keywords = None
+    parsed_jd = {}
     if job_description and job_description.strip():
         parsed_jd = parse_job_description(job_description.strip())
         jd_keywords = list(set(
@@ -64,6 +61,31 @@ def analyze_full_resume(
             embedder=embedder,
             nlp=nlp,
         )
+
+    job_skills = list(dict.fromkeys(
+        parsed_jd.get('required_skills', []) + parsed_jd.get('preferred_skills', [])
+    )) if parsed_jd else []
+    skill_evidence = classify_skills(
+        skills=skills, projects=projects,
+        experience=parsed_resume.get('experience', []),
+        embedder=embedder, job_skills=job_skills,
+    )
+    demonstrated_entries = [item for item in skill_evidence if item['classification'] == 'Demonstrated']
+    listed_entries = [item for item in skill_evidence if item['classification'] != 'Not Found']
+    resume_skill_keys = {str(skill).strip().casefold() for skill in skills if str(skill).strip()}
+    listed_count = sum(1 for item in listed_entries if item['skill'].casefold() in resume_skill_keys)
+    demonstrated_count = sum(1 for item in demonstrated_entries if item['skill'].casefold() in resume_skill_keys)
+    skill_validation_pct = demonstrated_count / listed_count if listed_count else 0.0
+    skill_validation = {
+        'validated_skills': [
+            {'skill': item['skill'], 'projects': [item['source_name']] if item['source_section'] == 'Project' else [], 'similarity': item.get('similarity'), 'evidence': item.get('evidence', '')}
+            for item in demonstrated_entries if item['skill'].casefold() in resume_skill_keys
+        ],
+        'unvalidated_skills': [item['skill'] for item in skill_evidence if item['skill'].casefold() in resume_skill_keys and item['classification'] != 'Demonstrated'],
+        'validation_percentage': skill_validation_pct,
+        'skill_project_mapping': {item['skill']: ([item['source_name']] if item.get('source_name') else []) for item in skill_evidence},
+        'validation_score': skill_validation_pct * 15.0,
+    }
 
     from backend.utils.file_utils import (
         get_default_grammar_results, get_default_location_results,
@@ -98,7 +120,7 @@ def analyze_full_resume(
 
     validated_raw   = skill_validation.get('validated_skills', [])
     unvalidated_raw = skill_validation.get('unvalidated_skills', [])
-    total_skills    = len(validated_raw) + len(unvalidated_raw)
+    total_skills    = len(resume_skill_keys)
     val_pct         = round((len(validated_raw) / total_skills * 100) if total_skills > 0 else 0, 1)
 
     skill_validation_details = {
@@ -106,6 +128,7 @@ def analyze_full_resume(
             {
                 "skill":    item['skill'],
                 "projects": item.get('projects', []),
+                "similarity": item.get('similarity'),
             }
             for item in validated_raw
         ],
@@ -113,7 +136,15 @@ def analyze_full_resume(
         "total":           total_skills,
         "validated_count": len(validated_raw),
         "validation_pct":  val_pct,
+        "skills": skill_evidence,
+        "evidence_coverage_pct": round((demonstrated_count / listed_count * 100) if listed_count else 0.0, 1),
     }
+
+    project_result = recommend_projects(
+        role=(target_role or '').strip(), skills=skills, projects=projects,
+        skill_details=skill_evidence,
+        jd_gaps=(jd_comparison_result or {}).get('skills_gap', []),
+    )
 
     return {
         "ATS_score":          scores['overall_score'],
@@ -141,6 +172,14 @@ def analyze_full_resume(
         "strengths": _generate_strengths(parsed_resume, skills, projects, action_verbs, skill_validation, scores),
         "interpretation":    scores.get('overall_interpretation', ''),
         "skill_validation_details": skill_validation_details,
+        "score_explanations": scores.get('score_explanations', []),
+        "overall_score_explanation": scores.get('overall_score_explanation', {}),
+        "project_recommendations": project_result.get('recommendations', []),
+        "recommendations_source": project_result.get('source', 'fallback'),
+        "target_role": (target_role or '').strip(),
+        "projects": projects,
+        "suggestions": list(dict.fromkeys([issue.how_to_fix for issue in detailed_feedback if issue.how_to_fix]))[:10],
+        "critical_issues": [issue.issue_title for issue in detailed_feedback if str(issue.severity_level).lower() in {'high', 'critical'}],
         "experience_months": experience_months,
     }
 

@@ -41,9 +41,22 @@ def display_overall_score(analysis: Dict[str, Any]) -> None:
 
 
 def display_score_breakdown(analysis: Dict[str, Any]) -> None:
-    """Five progress bars, one per scoring component."""
+    """Show the unchanged component scores with their scorer-derived explanations."""
     component_scores = analysis.get("component_scores") or {}
+    explanations = {item.get("category"): item for item in analysis.get("score_explanations", []) if isinstance(item, dict)}
+    if "Keywords and Skills" in explanations:
+        explanations["Keywords & Skills"] = explanations["Keywords and Skills"]
     st.markdown("###  Score Breakdown")
+
+    overall = analysis.get("overall_score_explanation") or {}
+    if overall.get("strongest_category") or overall.get("weakest_category"):
+        st.caption(f"Strongest area: **{overall.get('strongest_category', '—')}** ({overall.get('strongest_score', '—')}) · Area with most room to improve: **{overall.get('weakest_category', '—')}** ({overall.get('weakest_score', '—')}).")
+    with st.expander("How the overall score is calculated"):
+        st.write(overall.get("calculation", "The existing scoring model combines the five component scores and applies its existing bonuses and job-description penalties."))
+        if overall.get("bonuses"):
+            st.markdown("**Bonuses:** " + ", ".join(f"{name.replace('_', ' ')} (+{points:g})" for name, points in overall["bonuses"].items()))
+        if overall.get("penalties"):
+            st.markdown("**Penalties:** " + ", ".join(f"{name.replace('_', ' ')} (−{points:g})" for name, points in overall["penalties"].items()))
 
     left, right = st.columns(2)
     for i, (label, key, max_score, icon) in enumerate(COMPONENTS):
@@ -60,4 +73,24 @@ def display_score_breakdown(analysis: Dict[str, Any]) -> None:
                 unsafe_allow_html=True,
             )
             st.markdown(f"**{value:.0f}/{max_score}**")
-            st.markdown("")
+            detail = explanations.get(label)
+            if detail:
+                with st.expander(f"Why {value:.0f}/{max_score}?"):
+                    st.write(detail.get("reason", ""))
+                    deductions = detail.get("deductions") or []
+                    if deductions:
+                        st.markdown("**What affected the score**")
+                        for deduction in deductions:
+                            points = deduction.get("points")
+                            suffix = f" (−{points:g} points)" if isinstance(points, (int, float)) and points else ""
+                            st.markdown(f"- **{deduction.get('item', 'Scoring signal')}**{suffix}: {deduction.get('evidence', '')}")
+                    if detail.get("missing_elements"):
+                        st.markdown("**Missing elements**")
+                        for item in detail["missing_elements"]:
+                            st.markdown(f"- {item}")
+                    if detail.get("suggestions"):
+                        st.markdown("**Ways to improve**")
+                        for item in detail["suggestions"]:
+                            st.markdown(f"- {item}")
+                    if detail.get("evidence"):
+                        st.caption("Signals used: " + "; ".join(str(item) for item in detail["evidence"]))

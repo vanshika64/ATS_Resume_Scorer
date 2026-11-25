@@ -246,6 +246,25 @@
     </div>
     {% endfor %}
 
+    {% if overall_score_explanation %}
+    <p><strong>Overall score context:</strong> {{ overall_score_explanation.summary }}
+       {% if overall_score_explanation.strongest_category %} Strongest area: {{ overall_score_explanation.strongest_category }} ({{ overall_score_explanation.strongest_score }}).{% endif %}
+       {% if overall_score_explanation.weakest_category %} Area with most room to improve: {{ overall_score_explanation.weakest_category }} ({{ overall_score_explanation.weakest_score }}).{% endif %}
+    </p>
+    {% endif %}
+
+    {% if score_explanations %}
+    <h2>Why Each Category Received Its Score</h2>
+    {% for explanation in score_explanations %}
+    <div class="issue-card">
+        <div class="issue-title">{{ explanation.category }} — {{ explanation.obtained_score }}/{{ explanation.maximum_score }}</div>
+        <div class="issue-meta">{{ explanation.reason }}</div>
+        {% if explanation.deductions %}<ul>{% for item in explanation.deductions %}<li>{{ item.item }} ({{ item.points }} points): {{ item.evidence }}</li>{% endfor %}</ul>{% endif %}
+        {% if explanation.suggestions %}<div class="issue-fix"><strong>Possible improvements:</strong> {{ explanation.suggestions | join('; ') }}</div>{% endif %}
+    </div>
+    {% endfor %}
+    {% endif %}
+
     <!-- ── Strengths ── -->
     <h2>Strengths</h2>
     {% if strengths %}

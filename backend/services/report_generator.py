@@ -81,6 +81,11 @@ def generate_html_reports(analysis_data: Dict) -> Dict[str, str]:
     total_skills       = svd_raw.get('total', len(validated_skills) + len(unvalidated_skills))
     validated_count    = svd_raw.get('validated_count', len(validated_skills))
     validation_pct     = svd_raw.get('validation_pct', 0.0)
+    skill_evidence     = svd_raw.get('skills', []) or []
+
+    score_explanations = analysis_data.get('score_explanations', []) or []
+    overall_score_explanation = analysis_data.get('overall_score_explanation', {}) or {}
+    project_recommendations = analysis_data.get('project_recommendations', []) or []
 
     #7. JD comparison (for Report 3) 
     jd_raw = analysis_data.get('jd_match_analysis') or analysis_data.get('jd_comparison')
@@ -115,6 +120,11 @@ def generate_html_reports(analysis_data: Dict) -> Dict[str, str]:
         'total_skills':       total_skills,
         'validated_count':    validated_count,
         'validation_pct':     validation_pct,
+        'skill_evidence':     skill_evidence,
+        'score_explanations': score_explanations,
+        'overall_score_explanation': overall_score_explanation,
+        'project_recommendations': project_recommendations,
+        'target_role':        analysis_data.get('target_role', ''),
         # JD analysis
         'jd_analysis':        jd_raw,
     }

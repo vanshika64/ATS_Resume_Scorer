@@ -249,6 +249,18 @@
         </div>
     </div>
 
+    {% if skill_evidence %}
+    <h2>Evidence-Based Skill Validation</h2>
+    {% for item in skill_evidence %}
+    <div class="validated-skill">
+        <div class="validated-skill-name">{{ item.skill }} — {{ item.classification }}</div>
+        <div class="validated-skill-evidence">{{ item.explanation }}{% if item.source_section %} Source: {{ item.source_section }}{% endif %}{% if item.source_name %} · {{ item.source_name }}{% endif %}</div>
+        {% if item.evidence %}<blockquote>{{ item.evidence }}</blockquote>{% endif %}
+        {% if item.recommendation %}<div class="unvalidated-tip">Next step: {{ item.recommendation }}</div>{% endif %}
+    </div>
+    {% endfor %}
+    {% endif %}
+
     <!-- ── ATS Compatibility ── -->
     <h2>ATS Compatibility</h2>
     {% set ats_score = component_scores.ats_compatibility %}

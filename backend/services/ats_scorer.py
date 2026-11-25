@@ -369,6 +369,23 @@ def calculate_overall_score(
     overall_score = min(100.0, max(0.0, score))
     interpretation = _generate_score_interpretation(overall_score)
 
+    score_explanations = build_score_explanations(
+        text=text, parsed_resume=parsed_resume, keywords=keywords, skills=skills,
+        action_verbs=action_verbs, validation_results=skill_validation_results,
+        grammar_results=grammar_results, location_results=location_results,
+        jd_keywords=jd_keywords,
+        scores={
+            'formatting': formatting_score, 'keywords': keywords_score,
+            'content': content_score, 'skill_validation': skill_validation_score,
+            'ats_compatibility': ats_compatibility_score,
+        },
+    )
+    sorted_components = sorted(
+        score_explanations, key=lambda item: item['obtained_score'] / item['maximum_score']
+    )
+    strongest = sorted_components[-1] if sorted_components else None
+    weakest = sorted_components[0] if sorted_components else None
+
     return {
         'overall_score':           round(overall_score, 1),
         'formatting_score':        round(formatting_score, 1),
@@ -378,7 +395,152 @@ def calculate_overall_score(
         'ats_compatibility_score': round(ats_compatibility_score, 1),
         'overall_interpretation':  interpretation,
         'penalties':               penalties,
-        'bonuses':                 bonuses,}
+        'bonuses':                 bonuses,
+        'score_explanations':      score_explanations,
+        'overall_score_explanation': {
+            'summary': interpretation,
+            'calculation': 'The original model combines normalized Keywords and Skills Validation (40%), Content Quality (30%), Formatting (15%), and ATS Compatibility (15%), then applies its existing grammar, privacy, skill-validation, and job-description adjustments. The displayed component maximums remain 20/25/25/15/15.',
+            'strongest_category': strongest['category'] if strongest else '',
+            'weakest_category': weakest['category'] if weakest else '',
+            'strongest_score': f"{strongest['obtained_score']}/{strongest['maximum_score']}" if strongest else '',
+            'weakest_score': f"{weakest['obtained_score']}/{weakest['maximum_score']}" if weakest else '',
+            'bonuses': bonuses,
+            'penalties': penalties,
+        },
+    }
+
+
+def build_score_explanations(
+    text: str, parsed_resume: Dict, keywords: List[str], skills: List[str],
+    action_verbs: List[str], validation_results: Dict, grammar_results: Dict,
+    location_results: Dict, jd_keywords: Optional[List[str]], scores: Dict,
+) -> List[Dict]:
+    """Explain component scores using the same measurable signals as the scorer."""
+    def tier(value, tiers):
+        return _tier_score(value, tiers)
+
+    resume_keywords = keywords or []
+    exp = [entry for entry in parsed_resume.get('experience', []) if isinstance(entry, dict)]
+    edu = [entry for entry in parsed_resume.get('education', []) if isinstance(entry, dict)]
+    projects = [entry for entry in parsed_resume.get('projects', []) if isinstance(entry, dict)]
+    summary = parsed_resume.get('professional_summary') or ''
+    bullet_count = sum(1 for line in text.split('\n') if re.match(r'^\s*[•\-*◦]', line) or re.match(r'^\s*\d+\.', line))
+    filled = sum(bool(value) for value in (exp, edu, skills, summary.strip(), projects))
+    achievement_patterns = [r'\d+%', r'\$\d+', r'\d+[kKmMbB]', r'\d+\s*(?:users|customers|clients|projects|hours|days|months|years)', r'(?:increased|decreased|improved|reduced|grew|saved)\s+(?:by\s+)?\d+']
+    achievement_count = sum(len(re.findall(pattern, text, re.IGNORECASE)) for pattern in achievement_patterns)
+    grammar_penalty = float(grammar_results.get('penalty_applied', 0.0) or 0.0)
+    validated = validation_results.get('validated_skills', []) or []
+    unvalidated = validation_results.get('unvalidated_skills', []) or []
+    keyword_matches = fuzzy_match_keywords(list(set(resume_keywords + (skills or []))), jd_keywords or [], threshold=80) if jd_keywords else {'matched': [], 'missing': []}
+
+    format_parts = [
+        ('experience details', 3.0 if exp and any(item.get('job_title') or item.get('description') for item in exp) else 0.0, 'Add a clear role title or description to experience entries.'),
+        ('education section', 2.0 if edu else 0.0, 'Add an Education section if applicable.'),
+        ('skills list', 2.0 if len(skills or []) >= 3 else 0.0, 'List at least three relevant skills you can substantiate.'),
+        ('professional summary', 1.5 if len(summary) > 30 else 0.0, 'Add a concise summary of more than 30 characters if useful for your profile.'),
+        ('project section', 1.5 if projects else 0.0, 'Add projects if you have relevant work to show.'),
+    ]
+    format_bullets = tier(bullet_count, [(15,5.0),(10,4.0),(5,3.0),(3,2.0),(1,1.0)])
+    format_structure = tier(filled, [(4,5.0),(3,4.0),(2,3.0),(1,2.0)])
+    format_score = sum(part[1] for part in format_parts) + format_bullets + format_structure
+    format_missing = [part[2] for part in format_parts if part[1] == 0.0]
+    if format_bullets < 5:
+        format_missing.append(f'Only {bullet_count} bullet-style lines were detected; the top tier requires 15.')
+    if format_structure < 5:
+        format_missing.append(f'{filled} of 5 parsed resume sections contain content; the top tier requires 4.')
+
+    keyword_count_points = tier(len(resume_keywords), [(20,10.0),(15,8.0),(10,6.0),(5,4.0),(3,2.0)])
+    skill_count_points = tier(len(skills or []), [(15,10.0),(10,8.0),(7,6.0),(5,4.0),(3,2.0)])
+    if jd_keywords:
+        match_ratio = len(keyword_matches['matched']) / len(jd_keywords)
+        jd_points = tier(match_ratio, [(0.7,5.0),(0.5,4.0),(0.3,3.0),(0.2,2.0),(0.1,1.0)])
+    else:
+        match_ratio = None
+        jd_points = 3.0 if len(resume_keywords) >= 10 else 0.0
+    keyword_missing = []
+    if keyword_count_points < 10:
+        keyword_missing.append(f'{len(resume_keywords)} resume keywords detected; the top tier requires 20.')
+    if skill_count_points < 10:
+        keyword_missing.append(f'{len(skills or [])} skills detected; the top tier requires 15.')
+    if jd_keywords and jd_points < 5:
+        keyword_missing.append(f'{len(keyword_matches["missing"])} of {len(jd_keywords)} job-description keywords were not matched.')
+    if not jd_keywords:
+        keyword_missing.append('No job description was supplied; this path uses the existing general keyword rule instead of JD-specific coverage.')
+
+    verb_points = tier(len(action_verbs or []), [(15,10.0),(10,8.0),(7,6.0),(5,4.0),(3,2.0)])
+    achievement_points = tier(achievement_count, [(10,5.0),(7,4.0),(5,3.0),(3,2.0),(1,1.0)])
+    grammar_points = max(0.0, 10.0 - grammar_penalty / 2.0)
+    content_missing = []
+    if verb_points < 10:
+        content_missing.append(f'{len(action_verbs or [])} action verbs detected; the top tier requires 15.')
+    if achievement_points < 5:
+        content_missing.append(f'{achievement_count} quantified achievement patterns detected; the top tier requires 10.')
+    if grammar_points < 10:
+        content_missing.append(f'Grammar checks applied a {grammar_penalty:g}-point penalty.')
+
+    unvalidated_names = [entry if isinstance(entry, str) else entry.get('skill', '') for entry in unvalidated]
+    skill_missing = [f'{len(unvalidated_names)} of {len(validated) + len(unvalidated_names)} listed skills lacked evidence under the scorer matching rule.'] if unvalidated_names else []
+    location_penalty = float(location_results.get('penalty_applied', 0.0) or 0.0)
+    special_count = len(re.findall(r'[│┤├┼┴┬╔╗╚╝═║╠╣╦╩╬]', text))
+    exp_desc_len = sum(len(item.get('description', '') or '') for item in exp)
+    edu_desc_len = sum(len((item.get('degree') or '') + (item.get('institution') or '')) for item in edu)
+    short_sections = sum([bool(exp) and exp_desc_len < 20, bool(edu) and edu_desc_len < 20, bool(skills) and len(skills) < 2])
+    ats_deductions = []
+    if location_penalty:
+        ats_deductions.append({'item': 'Location privacy', 'points': location_penalty, 'evidence': 'Address/location patterns detected in the resume.'})
+    if special_count > 10:
+        points = 2.0 if special_count > 20 else 1.0
+        ats_deductions.append({'item': 'Decorative line characters', 'points': points, 'evidence': f'{special_count} matching special characters detected.'})
+    if short_sections:
+        points = 2.0 if short_sections >= 2 else 1.0
+        ats_deductions.append({'item': 'Very short parsed sections', 'points': points, 'evidence': f'{short_sections} section length checks were below the scorer threshold.'})
+
+    data = [
+        ('Formatting', 'formatting', 20.0, scores['formatting'], format_missing, [part[0] for part in format_parts if part[1] > 0] + ([f'{bullet_count} bullet-style lines'] if bullet_count else [])),
+        ('Keywords and Skills', 'keywords', 25.0, scores['keywords'], keyword_missing, [f'{len(resume_keywords)} resume keywords', f'{len(skills or [])} extracted skills'] + ([f'{len(keyword_matches["matched"])} of {len(jd_keywords)} JD keywords matched'] if jd_keywords else [])),
+        ('Content Quality', 'content', 25.0, scores['content'], content_missing, [f'{len(action_verbs or [])} action verbs', f'{achievement_count} quantified achievement patterns']),
+        ('Skill Validation', 'skill_validation', 15.0, scores['skill_validation'], skill_missing, [f'{len(validated)} skills matched project or experience text', f'{len(unvalidated_names)} listed skills had no match']),
+        ('ATS Compatibility', 'ats_compatibility', 15.0, scores['ats_compatibility'], [], [f'{special_count} decorative line characters', f'{short_sections} short-section checks', f'{location_penalty:g} location privacy penalty']),
+    ]
+    evidence_by_key = {
+        'formatting': [line.strip() for line in text.splitlines() if re.match(r'^\s*[•\-*◦]|^\s*\d+\.', line)][:3],
+        'keywords': [line.strip() for line in text.splitlines() if any(term and term.casefold() in line.casefold() for term in list(skills or [])[:12])][:5],
+        'content': [line.strip() for line in text.splitlines() if re.match(r'^\s*[•\-*◦]|^\s*\d+\.', line) and any(re.search(pattern, line, re.IGNORECASE) for pattern in achievement_patterns)][:5],
+        'skill_validation': [str(entry.get('evidence')) for entry in validated if isinstance(entry, dict) and entry.get('evidence')],
+        'ats_compatibility': [str(item.get('text')) for item in location_results.get('detected_locations', [])[:5] if isinstance(item, dict) and item.get('text')],
+    }
+    result = []
+    for label, key, maximum, score, missing, evidence in data:
+        fraction = score / maximum if maximum else 0
+        reason = f'{label} earned {score:g}/{maximum:g} based on the measured resume signals listed below.'
+        if key == 'ats_compatibility' and ats_deductions:
+            deductions = ats_deductions
+        elif key == 'skill_validation':
+            deductions = [{'item': 'Skills without matching project or experience evidence', 'points': round(maximum - score, 2), 'evidence': ', '.join(unvalidated_names[:8]) or 'No matching evidence found.'}] if score < maximum else []
+        elif key == 'formatting':
+            deductions = [
+                {'item': item[0], 'points': round((3.0,2.0,2.0,1.5,1.5)[index] - item[1], 1), 'evidence': item[2]}
+                for index, item in enumerate(format_parts) if item[1] < (3.0,2.0,2.0,1.5,1.5)[index]
+            ]
+            max_bullet_points = 5.0
+            deductions += ([{'item': 'Bullet-line count', 'points': round(max_bullet_points-format_bullets, 1), 'evidence': f'{bullet_count} bullet-style lines detected.'}] if format_bullets < max_bullet_points else [])
+            deductions += ([{'item': 'Parsed section coverage', 'points': round(5.0-format_structure, 1), 'evidence': f'{filled} of 5 section types were populated.'}] if format_structure < 5 else [])
+        elif key == 'keywords':
+            deductions = ([{'item': 'Resume keyword count', 'points': round(10.0-keyword_count_points, 1), 'evidence': f'{len(resume_keywords)} keywords detected.'}] if keyword_count_points < 10 else [])
+            deductions += ([{'item': 'Extracted skill count', 'points': round(10.0-skill_count_points, 1), 'evidence': f'{len(skills or [])} skills detected.'}] if skill_count_points < 10 else [])
+            if jd_keywords:
+                deductions += ([{'item': 'Job keyword coverage', 'points': round(5.0-jd_points, 1), 'evidence': f'{len(keyword_matches["matched"])} of {len(jd_keywords)} requirements matched.'}] if jd_points < 5 else [])
+        elif key == 'content':
+            deductions = ([{'item': 'Action-verb count', 'points': round(10.0-verb_points, 1), 'evidence': f'{len(action_verbs or [])} action verbs detected.'}] if verb_points < 10 else [])
+            deductions += ([{'item': 'Quantified-achievement patterns', 'points': round(5.0-achievement_points, 1), 'evidence': f'{achievement_count} patterns detected.'}] if achievement_points < 5 else [])
+            deductions += ([{'item': 'Grammar penalty', 'points': round(10.0-grammar_points, 1), 'evidence': f'{grammar_penalty:g} penalty points from grammar checks.'}] if grammar_points < 10 else [])
+        else:
+            deductions = []
+        suggestions = missing[:]
+        if key == 'keywords' and jd_keywords:
+            suggestions += [f'Address the job requirement “{term}” only if it reflects your real skills or experience.' for term in keyword_matches['missing'][:5]]
+        result.append({'category': label, 'obtained_score': round(float(score), 1), 'maximum_score': maximum, 'reason': reason, 'deductions': deductions, 'missing_elements': missing, 'suggestions': suggestions[:8], 'evidence': evidence_by_key.get(key) or evidence})
+    return result
 
 #Overall score calculation and interpretation
 def generate_strengths(

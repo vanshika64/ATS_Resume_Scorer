@@ -4,7 +4,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 
 from backend.api.auth import get_current_user
-from backend.models.schemas import AnalysisResponse, ComponentScores, JDComparison, SkillValidationDetails
+from backend.models.schemas import AnalysisResponse, ComponentScores, JDComparison, SkillValidationDetails, ProjectRecommendationRequest
 from backend.utils.file_utils import (
     get_default_grammar_results,
     get_default_location_results,
@@ -25,6 +25,7 @@ async def analyze_resume(
     request: Request,
     resume: UploadFile = File(..., description='Resume file — PDF or DOCX, max 5 MB'),
     job_description: str = Form('', description='Job description text (optional)'),
+    target_role: str = Form('', description='Target role for personalized project recommendations (optional)'),
     user_id: str = Depends(get_current_user),
 ):
 
@@ -86,7 +87,8 @@ async def analyze_resume(
             resume_text=resume_text,
             nlp=nlp,
             embedder=embedder,
-            job_description=job_description
+            job_description=job_description,
+            target_role=target_role,
         )
 
         print("STEP 10: AI analysis completed")
@@ -129,6 +131,8 @@ async def analyze_resume(
         total=svd_raw.get('total', 0),
         validated_count=svd_raw.get('validated_count', 0),
         validation_pct=svd_raw.get('validation_pct', 0.0),
+        skills=svd_raw.get('skills', []),
+        evidence_coverage_pct=svd_raw.get('evidence_coverage_pct', svd_raw.get('validation_pct', 0.0)),
     )
 
     print("STEP 13: Creating response object")
@@ -147,7 +151,16 @@ async def analyze_resume(
         matched_keywords=result.get('matched_keywords', []),
         skills=list(result.get('skills', [])[:20]),
         jd_comparison=jd_comparison_result,
-        interpretation=result.get('interpretation', '')
+        interpretation=result.get('interpretation', ''),
+        strengths=result.get('strengths', []),
+        suggestions=result.get('suggestions', []),
+        critical_issues=result.get('critical_issues', []),
+        score_explanations=result.get('score_explanations', []),
+        overall_score_explanation=result.get('overall_score_explanation', {}),
+        project_recommendations=result.get('project_recommendations', []),
+        recommendations_source=result.get('recommendations_source', ''),
+        target_role=result.get('target_role', ''),
+        projects=result.get('projects', []),
     )
 
     print("STEP 14: Saving analysis to database")
@@ -170,6 +183,23 @@ async def analyze_resume(
     print("STEP 16: Returning final response")
 
     return response
+
+
+@router.post('/project-recommendations')
+async def regenerate_project_recommendations(
+    payload: ProjectRecommendationRequest,
+    user_id: str = Depends(get_current_user),
+):
+    """Regenerate role-specific recommendations from the existing analysis data."""
+    from backend.services.project_recommender import recommend_projects
+    result = recommend_projects(
+        role=payload.target_role,
+        skills=payload.skills,
+        projects=payload.projects,
+        skill_details=payload.skill_details,
+        jd_gaps=payload.jd_gaps,
+    )
+    return {"target_role": payload.target_role, **result}
 
 @router.get('/health')
 async def health_check(request: Request):

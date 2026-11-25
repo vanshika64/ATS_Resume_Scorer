@@ -175,6 +175,11 @@ def render() -> None:
         ["General ATS Score", "Job Description Comparison"],
         horizontal=True,
     )
+    target_role = st.text_input(
+        "Target role for project recommendations (optional)",
+        placeholder="e.g. Backend Developer",
+        key="target_role_input",
+    )
 
     st.markdown("---")
 
@@ -222,6 +227,7 @@ def render() -> None:
                 resume_file=resume_file,
                 access_token=access_token,
                 job_description=job_description,
+                target_role=target_role.strip(),
             )
     except requests.RequestException as exc:
         _show_backend_error(exc)

@@ -56,7 +56,7 @@ def analyze_issues(
                 "Add a 'PROJECTS' section heading after your Experience section",
                 "Include 2–3 projects (personal, academic, or open-source)",
                 "For each project: write the title, tech stack used, what you built, and a measurable result",
-                "Example: 'E-Commerce Platform — React, Node.js, MongoDB. Handled 500+ transactions/month'",
+                "Use a factual structure such as: 'Built [feature] with [technology] to solve [problem]; add a measured result only if you can verify it.'",
                 "Link to GitHub or a live demo if available (e.g., github.com/yourname/project)",
             ],
 
@@ -65,9 +65,8 @@ def analyze_issues(
                 "PROJECTS\n"
                 "• E-Commerce Platform — Built a full-stack shopping site using "
                 "React, Node.js, and MongoDB. Implemented payment processing with "
-                "Stripe, handling 500+ transactions/month.\n"
-                "• ML Sentiment Analyzer — Trained a BERT model on 10K reviews "
-                "achieving 92% accuracy. Deployed as a REST API with FastAPI."
+                "Stripe to support [verified user workflow].\n"
+                "• ML Sentiment Analyzer — Applied [model or method] to [dataset]; report a measured result only if you evaluated it."
             ),
         ))
 
@@ -104,9 +103,9 @@ def analyze_issues(
             example_improvement=(
                 "Add:\n"
                 "EXPERIENCE\n"
-                "Software Engineering Intern — XYZ Corp (Jun 2025 – Aug 2025)\n"
-                "• Developed REST APIs with FastAPI serving 10K requests/day\n"
-                "• Reduced page load time by 40% through caching optimization"
+                "[Role] — [Company] ([verified dates])\n"
+                "• Developed [system or feature] with [technology] for [documented use case]\n"
+                "• Improved page load time through caching; add the measured change only if you recorded it"
             ),
         ))
 
@@ -140,8 +139,8 @@ def analyze_issues(
             example_improvement=(
                 "Add:\n"
                 "EDUCATION\n"
-                "B.Tech in Computer Science — IIT Delhi (2021–2025)\n"
-                "CGPA: 8.5 | Relevant Coursework: Data Structures, ML, DBMS"
+                "[Degree] — [Institution] ([verified graduation year])\n"
+                "[GPA, if you choose to include your actual result] | [Relevant coursework]"
             ),
         ))
 
@@ -213,7 +212,7 @@ def analyze_issues(
                 f"Your skill '{unvalidated[0]}' has no supporting evidence.\n\n"
                 f"Fix: Add to a project or experience bullet:\n"
                 f"'Built a data pipeline using {unvalidated[0]} that processed "
-                "10K records daily, reducing manual effort by 60%.'"
+                "[records processed], reducing [manual task]; include a measured change only if you verified it.'"
             ),
         ))
 
@@ -254,8 +253,8 @@ def analyze_issues(
                 "• Responsible for building the backend\n"
                 "• Worked on the payment feature\n\n"
                 "After:\n"
-                "• Developed a REST API with FastAPI handling 5K daily requests\n"
-                "• Implemented Stripe payment integration reducing checkout time by 30%"
+                "• Developed a REST API with FastAPI for [specific workflow]\n"
+                "• Implemented payment integration with [provider] and describe the verified behavior"
             ),
         ))
 
@@ -275,23 +274,22 @@ def analyze_issues(
             ),
             where_it_appears="Experience section — bullet point content",
             how_to_fix=(
-                "Add numbers to at least 50% of your bullet points. "
-                "Include metrics like: users served, response time improved, "
+                "Include verified numbers where they add useful context, such as users served or response time changes. "
                 "revenue generated, lines of code, team size, etc."
             ),
             action_items=[
                 "Go through each bullet point and ask: 'How much?', 'How many?', 'By what %?'",
                 "Add metrics: users served, requests/day, % improvement, team size, time saved",
-                "Examples: '500+ daily users', 'reduced load time by 40%', 'handled 10K API calls/day'",
-                "If exact numbers aren't known, use reasonable estimates (e.g., '~200 users')",
-                "Aim for numbers in at least 50% of your experience bullets",
+                "Use numbers only when you can verify them from records, measurements, or a clear calculation.",
+                "If you do not have a reliable metric, describe the scope, method, or outcome without a number.",
+                "Do not estimate or invent numbers; describe scope and method when you cannot verify a metric.",
             ],
             example_improvement=(
                 "Before:\n"
                 "• Improved application performance\n"
                 "• Managed a team of developers\n\n"
                 "After:\n"
-                "• Improved API response time by 45% through Redis caching\n"
+                "• Improved API response time through Redis caching; add a measured percentage only if you tested and recorded it\n"
                 "• Led a team of 5 developers delivering 3 features per sprint"
             ),
         ))
@@ -399,8 +397,8 @@ def analyze_issues(
             example_improvement=(
                 "Add:\n"
                 "PROFESSIONAL SUMMARY\n"
-                "Full-stack developer with 2+ years of experience building scalable "
-                "web applications using React, Node.js, and AWS. Passionate about "
+                "Full-stack developer with [verified experience or education context] building "
+                "web applications using [relevant technologies]. Focused on "
                 "clean architecture and performance optimization."
             ),
         ))
