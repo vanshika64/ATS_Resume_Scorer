@@ -1,4 +1,5 @@
 import unittest
+from io import BytesIO
 from unittest.mock import patch
 
 import numpy as np
@@ -6,6 +7,9 @@ import numpy as np
 from backend.services.ats_scorer import calculate_overall_score
 from backend.services.project_recommender import recommend_projects
 from backend.services.report_generator import generate_html_reports
+from backend.services.pdf_export import generate_combined_pdf
+from backend.api.routes import generate_pdf as generate_pdf_endpoint
+from PyPDF2 import PdfReader
 from backend.services.skill_evidence import classify_skills
 from backend.services.resume_analyzer import analyze_full_resume
 from backend.models.schemas import AnalysisResponse, ComponentScores, JDComparison, SkillValidationDetails
@@ -181,6 +185,42 @@ class ProjectRecommendationTests(unittest.TestCase):
         self.assertIn("Signals counted", combined)
         self.assertIn("Built a service using Python.", combined)
         self.assertIn("Service API", combined)
+
+    def test_builtin_pdf_fallback_returns_a_readable_pdf(self):
+        reports = generate_html_reports({
+            "ats_score": 72,
+            "component_scores": {"formatting": 15, "keywords": 18, "content": 18, "skill_validation": 9, "ats_compatibility": 12},
+            "detailed_feedback": [], "strengths": [], "skill_validation_details": {"skills": []},
+        })
+        with patch("backend.services.pdf_export._WeasyHTML", None):
+            pdf = generate_combined_pdf(reports)
+        reader = PdfReader(BytesIO(pdf))
+        self.assertTrue(pdf.startswith(b"%PDF-"))
+        self.assertGreaterEqual(len(reader.pages), 1)
+        extracted = " ".join(page.extract_text() or "" for page in reader.pages)
+        self.assertIn("ATS Resume Vision", extracted)
+        self.assertIn("Overall ATS Score", extracted)
+
+
+class PDFEndpointTests(unittest.TestCase):
+    def test_backend_pdf_endpoint_returns_pdf_response(self):
+        analysis = AnalysisResponse(
+            ATS_score=75,
+            ats_score=75,
+            component_scores=ComponentScores(formatting=15, keywords=18, content=18, skill_validation=12, ats_compatibility=12),
+            issues_summary=[],
+            detailed_feedback=[],
+        )
+        endpoint_call = generate_pdf_endpoint(analysis, user_id="test-user")
+        try:
+            endpoint_call.send(None)
+        except StopIteration as result:
+            response = result.value
+        else:
+            self.fail("PDF endpoint unexpectedly awaited external work")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.media_type, "application/pdf")
+        self.assertTrue(response.body.startswith(b"%PDF-"))
 
 
 if __name__ == "__main__":
