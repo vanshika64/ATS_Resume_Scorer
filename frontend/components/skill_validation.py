@@ -1,3 +1,4 @@
+from html import escape
 from typing import Any, Dict, List
 
 import streamlit as st
@@ -24,35 +25,32 @@ def display_skill_validation(analysis: Dict[str, Any]) -> None:
     total = len(entries)
     pct = details.get("evidence_coverage_pct", details.get("validation_pct", 0.0))
 
-    st.markdown("### Skill Validation")
     if not entries:
         st.info("No skills were extracted from the resume or target job description.")
         return
 
     cols = st.columns(5)
-    cols[0].metric("Total Skills", total)
+    cols[0].metric("Skills reviewed", total)
     for col, classification in zip(cols[1:], CLASSIFICATIONS):
         col.metric(classification, counts[classification])
-    st.caption(f"Evidence coverage: {pct:.0f}% of resume-listed skills have supporting evidence classified as demonstrated.")
+    st.caption(f"Evidence coverage · {pct:.0f}%")
     st.progress(min(max(float(pct) / 100.0, 0.0), 1.0))
 
-    selected = st.selectbox("Filter skills", ["All classifications", *CLASSIFICATIONS], key="skill_validation_filter")
-    visible = entries if selected == "All classifications" else [entry for entry in entries if entry.get("classification") == selected]
-    for entry in visible:
-        skill = str(entry.get("skill") or "Skill")
-        classification = entry.get("classification", "Listed Only")
-        with st.expander(f"{skill} · {classification}"):
-            if entry.get("source_name"):
-                st.caption(f"Source: {entry.get('source_section', 'Resume')} · {entry['source_name']}")
-            elif entry.get("source_section"):
-                st.caption(f"Source: {entry['source_section']}")
-            if entry.get("evidence"):
-                st.markdown("**Resume evidence**")
-                st.write(f"“{entry['evidence']}”")
-            else:
-                st.caption("No supporting sentence was available in this analysis.")
-            st.write(entry.get("explanation", ""))
-            if isinstance(entry.get("similarity"), (int, float)):
-                st.caption(f"Evidence similarity: {entry['similarity']:.0%}")
-            if entry.get("recommendation"):
-                st.markdown("**Next step:** " + entry["recommendation"])
+    for classification in CLASSIFICATIONS:
+        matching = [str(entry.get("skill") or "Skill") for entry in entries if entry.get("classification") == classification]
+        if not matching:
+            continue
+        preview = matching[:8]
+        chip_class = {
+            "Demonstrated": "demonstrated",
+            "Weak Evidence": "weak",
+            "Listed Only": "listed",
+            "Not Found": "not-found",
+        }[classification]
+        chips = " ".join(
+            f"<span class='skill-chip {chip_class}'>{escape(skill)}</span>"
+            for skill in preview
+        )
+        st.markdown(f"**{classification}**  {chips}", unsafe_allow_html=True)
+        if len(matching) > len(preview):
+            st.caption(f"And {len(matching) - len(preview)} more")

@@ -8,7 +8,7 @@ from frontend.components.skill_validation import display_skill_validation
 from frontend.components.jd_comparison import display_jd_comparison
 from frontend.components.detailed_feedback import display_detailed_feedback
 from frontend.components.action_items import display_action_items
-from frontend.components.recommendations import display_recommendations
+from frontend.components.recommendations import display_recommendations, display_resume_suggestions
 
 
 def display_results_dashboard(analysis: Dict[str, Any]) -> None:
@@ -23,27 +23,27 @@ def display_results_dashboard(analysis: Dict[str, Any]) -> None:
     st.markdown("---")
 
     display_score_breakdown(analysis)
-    st.markdown("---")
 
-    display_strengths(analysis.get("strengths") or [])
-    st.markdown("---")
+    with st.expander("Critical issues"):
+        display_critical_issues(analysis)
 
-    display_critical_issues(analysis)
-    st.markdown("---")
+    with st.expander("Skill validation"):
+        display_skill_validation(analysis)
 
-    display_skill_validation(analysis)
-    st.markdown("---")
+    with st.expander("Strengths"):
+        display_strengths(analysis.get("strengths") or [])
 
     # JD comparison only shows up if the user actually submitted a JD.
     jd_comparison = analysis.get("jd_comparison") or analysis.get("jd_match_analysis")
     if jd_comparison:
-        display_jd_comparison(jd_comparison)
-        st.markdown("---")
+        with st.expander("Job description match"):
+            display_jd_comparison(jd_comparison, analysis.get("skill_validation_details") or {})
 
-    display_detailed_feedback(analysis)
-    st.markdown("---")
-
-    display_action_items(analysis)
-    st.markdown("---")
-
-    display_recommendations(analysis)
+    with st.expander("Areas to improve"):
+        display_detailed_feedback(analysis)
+    with st.expander("Action checklist"):
+        display_action_items(analysis)
+    with st.expander("Resume improvement suggestions"):
+        display_resume_suggestions(analysis)
+    with st.expander("Projects recommended for you"):
+        display_recommendations(analysis)

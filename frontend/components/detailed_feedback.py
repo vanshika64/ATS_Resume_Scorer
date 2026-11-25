@@ -1,72 +1,45 @@
-from html import escape
 from typing import Any, Dict, List
 
 import streamlit as st
 
-from frontend.components._helpers import get_severity_style
+
+SEVERITY_ORDER = ("critical", "high", "moderate", "medium", "low", "info")
 
 
-SEVERITY_ORDER = ["critical", "high", "medium", "low"]
-
-
-def _group_by_severity(issues: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+def _group_issues(issues: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
     grouped: Dict[str, List[Dict[str, Any]]] = {level: [] for level in SEVERITY_ORDER}
     for issue in issues:
-        level = (issue.get("severity_level") or "low").lower()
+        level = str(issue.get("severity_level") or "low").lower()
         grouped.setdefault(level, []).append(issue)
     return grouped
 
 
-def _render_issue(issue: Dict[str, Any]) -> None:
-    icon, _, _ = get_severity_style(issue.get("severity_level"))
-    severity = (issue.get("severity_level") or "low").lower()
-    title = issue.get("issue_title", "Untitled issue")
-    impact = issue.get("ats_impact", "")
-    explanation = issue.get("explanation", "")
-    where = issue.get("where_it_appears", "")
-    how_to_fix = issue.get("how_to_fix", "")
-    action_items = issue.get("action_items") or []
-    example = issue.get("example_improvement", "")
-
-    st.markdown(
-        f"""
-        <div class="feedback-issue is-{escape(severity)}">
-            <strong class="feedback-issue-title">{icon} {escape(title)}</strong>
-            <span class="feedback-issue-impact">{escape(impact)}</span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    with st.expander("Details", expanded=False):
-        if explanation:
-            st.markdown(f"**What's happening:** {explanation}")
-        if where:
-            st.markdown(f"**Where it appears:** {where}")
-        if how_to_fix:
-            st.markdown(f"**How to fix:** {how_to_fix}")
-        if action_items:
-            st.markdown("**Action items:**")
-            for item in action_items:
-                st.markdown(f"- {item}")
-        if example:
-            st.markdown("**Example improvement:**")
-            st.code(example, language="text")
-
-
 def display_detailed_feedback(analysis: Dict[str, Any]) -> None:
-    issues = analysis.get("detailed_feedback") or []
+    issues = [item for item in (analysis.get("detailed_feedback") or []) if isinstance(item, dict)]
     if not issues:
-        return  # backend produced no per-issue feedback this run
+        st.info("No additional improvement items were returned for this analysis.")
+        return
 
-    st.markdown("###  Detailed Feedback")
-    st.caption(f"{len(issues)} issue(s) flagged — grouped by severity.")
-
-    grouped = _group_by_severity(issues)
+    st.caption(f"{len(issues)} item(s) from the resume review. Each recommendation should be checked against your actual experience.")
+    grouped = _group_issues(issues)
     for level in SEVERITY_ORDER:
         items = grouped.get(level, [])
         if not items:
             continue
-        st.markdown(f"#### {level.title()} ({len(items)})")
+        label = "High priority" if level in {"critical", "high"} else "Medium priority" if level in {"moderate", "medium"} else "Polish"
+        st.markdown(f"### {label} · {len(items)}")
         for issue in items:
-            _render_issue(issue)
+            title = issue.get("issue_title", "Resume feedback")
+            with st.container(border=True):
+                st.markdown(f"**{title}**")
+                if issue.get("explanation"):
+                    st.write(issue["explanation"])
+                if issue.get("where_it_appears"):
+                    st.markdown("**Evidence or location**")
+                    st.write(issue["where_it_appears"])
+                if issue.get("how_to_fix"):
+                    st.markdown("**Suggested improvement**")
+                    st.write(issue["how_to_fix"])
+                if issue.get("example_improvement"):
+                    st.markdown("**Example structure**")
+                    st.code(issue["example_improvement"], language=None)

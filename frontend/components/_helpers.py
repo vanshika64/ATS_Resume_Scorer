@@ -2,32 +2,18 @@ from typing import Tuple
 
 
 def get_score_color(score: float) -> Tuple[str, str]:
-    """Return dark-theme foreground and background colours for a score."""
+    """Return accessible foreground and background colors for a score."""
     if score >= 80:
-        return "#9ed8af", "#213a2b"
+        return "#4fc79b", "rgba(79,199,155,.12)"
     if score >= 60:
-        return "#f0c070", "#43331e"
-    return "#f09a90", "#442927"
+        return "#e5b765", "rgba(229,183,101,.12)"
+    return "#e98289", "rgba(233,130,137,.12)"
 
 
-def get_score_emoji(score: float) -> str:
-    """Return a compact status marker for the overall score."""
-    if score >= 90:
-        return "\u2b50"
-    if score >= 80:
-        return "\u2705"
-    if score >= 70:
-        return "\U0001f44d"
-    if score >= 60:
-        return "\u26a0\ufe0f"
-    return "\U0001f534"
-
-
-def get_severity_style(severity: str) -> Tuple[str, str, str]:
-    """Return a marker plus dark-theme foreground and background colours."""
+def get_severity_class(severity: str) -> str:
     level = (severity or "").lower()
-    if level in ("critical", "high"):
-        return "\U0001f534", "#f09a90", "#442927"
-    if level == "medium":
-        return "\U0001f7e1", "#f0c070", "#43331e"
-    return "\U0001f7e2", "#9ed8af", "#213a2b"
+    if level in {"critical", "high"}:
+        return "priority-high"
+    if level in {"moderate", "medium"}:
+        return "priority-medium"
+    return "priority-low"

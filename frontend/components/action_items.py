@@ -3,35 +3,36 @@ from typing import Any, Dict, List, Tuple
 import streamlit as st
 
 
-SEVERITY_RANK = {"critical": 0, "high": 1, "medium": 2, "low": 3}
+PRIORITY_RANK = {"critical": 0, "high": 0, "moderate": 1, "medium": 1, "low": 2, "info": 2}
+PRIORITY_LABEL = {0: "High priority", 1: "Medium priority", 2: "Low priority"}
 
 
-def _collect_action_items(analysis: Dict[str, Any]) -> List[Tuple[str, str, str]]:
-    """Return list of (severity, source_title, action_text)."""
-    items: List[Tuple[str, str, str]] = []
-
+def _collect_action_items(analysis: Dict[str, Any]) -> List[Tuple[int, str, str]]:
+    items: List[Tuple[int, str, str]] = []
     for issue in analysis.get("detailed_feedback") or []:
-        level = (issue.get("severity_level") or "low").lower()
-        title = issue.get("issue_title", "")
+        if not isinstance(issue, dict):
+            continue
+        level = str(issue.get("severity_level") or "low").lower()
+        priority = PRIORITY_RANK.get(level, 2)
         for action in issue.get("action_items") or []:
-            items.append((level, title, action))
-
+            items.append((priority, str(issue.get("issue_title", "Resume improvement")), str(action)))
     if not items:
-        for suggestion in analysis.get("suggestions") or []:
-            items.append(("medium", "General", suggestion))
-
-    items.sort(key=lambda row: SEVERITY_RANK.get(row[0], 99))
-    return items
+        items.extend((1, "Suggested improvement", str(item)) for item in analysis.get("suggestions") or [])
+    return sorted(items, key=lambda row: row[0])
 
 
 def display_action_items(analysis: Dict[str, Any]) -> None:
     items = _collect_action_items(analysis)
     if not items:
+        st.info("No action items were returned for this analysis.")
         return
-
-    st.markdown("###  Action Items")
-    st.caption("Concrete steps to improve your score, sorted by urgency.")
-
-    for level, source, action in items:
-        icon = {"critical": "🔴", "high": "🟠", "medium": "🟡", "low": "🟢"}.get(level, "🟢")
-        st.markdown(f"- {icon} **[{source}]** {action}")
+    st.caption("Work through the items that apply to your experience. Keep claims and metrics verifiable.")
+    for priority in (0, 1, 2):
+        group = [item for item in items if item[0] == priority]
+        if not group:
+            continue
+        st.markdown(f"### {PRIORITY_LABEL[priority]}")
+        for index, (_, source, action) in enumerate(group):
+            with st.container(border=True):
+                st.checkbox(action, key=f"action_item_{priority}_{index}_{abs(hash(source))}")
+                st.caption(f"From: {source}")

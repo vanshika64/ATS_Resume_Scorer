@@ -1,96 +1,122 @@
+from html import escape
 from typing import Any, Dict
 
 import streamlit as st
 
-from frontend.components._helpers import get_score_emoji
 
-
-# Component max scores match backend/core/config.py SCORE_WEIGHTS.
-# (Backend returns each component's score on its own scale, not 0–100.)
 COMPONENTS = [
-    ("Formatting",        "formatting",        20, "->"),
-    ("Keywords & Skills", "keywords",          25, "->"),
-    ("Content Quality",   "content",           25, "->"),
-    ("Skill Validation",  "skill_validation",  15, "->"),
-    ("ATS Compatibility", "ats_compatibility", 15, "->"),
+    ("Formatting", "formatting", 20),
+    ("Keywords and Skills", "keywords", 25),
+    ("Content Quality", "content", 25),
+    ("Skill Validation", "skill_validation", 15),
+    ("ATS Compatibility", "ats_compatibility", 15),
 ]
 
 
 def display_overall_score(analysis: Dict[str, Any]) -> None:
-    """Big colored score card with a short interpretation line."""
-    score = float(analysis.get("ATS_score", analysis.get("ats_score", 0)))
-    interpretation = analysis.get("interpretation", "")
-    score_tone = "excellent" if score >= 80 else "good" if score >= 60 else "needs"
-    emoji = get_score_emoji(score)
+    score = min(100.0, max(0.0, float(analysis.get("ATS_score", analysis.get("ats_score", 0)) or 0)))
+    interpretation = escape(str(analysis.get("interpretation", "") or ""))
+    explanation = analysis.get("overall_score_explanation") or {}
+    strongest = escape(str(explanation.get("strongest_category", "") or ""))
+    weakest = escape(str(explanation.get("weakest_category", "") or ""))
+    strongest_score = escape(str(explanation.get("strongest_score", "") or ""))
+    weakest_score = escape(str(explanation.get("weakest_score", "") or ""))
+    score_copy = f"<p>{interpretation}</p>" if interpretation else ""
+    highlights = "".join(
+        f"<span class='score-highlight'><strong>{label}:</strong> {category} {value}</span>"
+        for label, category, value in (
+            ("Strongest area", strongest, strongest_score),
+            ("Most room to improve", weakest, weakest_score),
+        ) if category
+    )
 
-    st.markdown("##  Analysis Results")
-    _, mid, _ = st.columns([1, 2, 1])
-    with mid:
-        st.markdown(
-            f"""
-            <div class="score-card">
-                <h1 class="score-card-value score-tone-{score_tone}">
-                    {emoji} {score:.0f}
-                </h1>
-                <h3 class="score-card-title">Overall ATS Score</h3>
-                <p class="score-card-copy">{interpretation}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    st.markdown("<div class='section-kicker'>Your results</div>", unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <section class="score-hero" aria-label="Overall ATS score">
+          <div class="score-ring" style="--score:{score:.1f}" role="img" aria-label="ATS score {score:.0f} out of 100">
+            <div class="score-ring-inner"><span class="score-ring-value">{score:.0f}</span><span class="score-ring-denom">out of 100</span></div>
+          </div>
+          <div class="score-summary">
+            <div class="page-kicker">Overall ATS score</div>
+            <h2>Resume analysis</h2>
+            {score_copy}
+            <div class="score-highlights">{highlights}</div>
+          </div>
+        </section>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def display_score_breakdown(analysis: Dict[str, Any]) -> None:
-    """Show the unchanged component scores with their scorer-derived explanations."""
     component_scores = analysis.get("component_scores") or {}
     explanations = {item.get("category"): item for item in analysis.get("score_explanations", []) if isinstance(item, dict)}
-    if "Keywords and Skills" in explanations:
-        explanations["Keywords & Skills"] = explanations["Keywords and Skills"]
-    st.markdown("###  Score Breakdown")
+    explanations.setdefault("Keywords and Skills", explanations.get("Keywords & Skills"))
+
+    children = []
+    for label, key, maximum in COMPONENTS:
+        value = float(component_scores.get(key, 0) or 0)
+        percentage = min(1.0, max(0.0, value / maximum))
+        detail = explanations.get(label) or {}
+        body = [
+            f"<div class='score-breakdown-progress' role='img' aria-label='{percentage:.0%} of available points'>"
+            f"<span style='width:{percentage * 100:.1f}%'></span></div>"
+        ]
+        if detail.get("reason"):
+            body.append(f"<p>{escape(str(detail['reason']))}</p>")
+        if detail.get("deductions"):
+            body.append("<h4>What reduced the score</h4><ul>")
+            for deduction in detail["deductions"]:
+                points = deduction.get("points")
+                points_copy = f" (−{points:g})" if isinstance(points, (int, float)) and points else ""
+                item = escape(str(deduction.get("item", "Scoring signal")))
+                evidence = escape(str(deduction.get("evidence", "")))
+                body.append(f"<li><strong>{item}</strong>{points_copy}: {evidence}</li>")
+            body.append("</ul>")
+        if detail.get("missing_elements"):
+            body.append("<h4>Missing elements</h4><ul>")
+            body.extend(f"<li>{escape(str(item))}</li>" for item in detail["missing_elements"])
+            body.append("</ul>")
+        if detail.get("suggestions"):
+            body.append("<h4>Ways to improve</h4><ul>")
+            body.extend(f"<li>{escape(str(item))}</li>" for item in detail["suggestions"])
+            body.append("</ul>")
+        if detail.get("evidence"):
+            body.append("<h4>Supporting signals</h4><ul>")
+            body.extend(f"<li>{escape(str(item))}</li>" for item in detail["evidence"])
+            body.append("</ul>")
+
+        children.append(
+            f"<details class='score-breakdown-child'>"
+            f"<summary>{escape(label)} <span>{value:.0f} / {maximum} points</span></summary>"
+            f"<div class='score-breakdown-child-body'>{''.join(body)}</div></details>"
+        )
 
     overall = analysis.get("overall_score_explanation") or {}
-    if overall.get("strongest_category") or overall.get("weakest_category"):
-        st.caption(f"Strongest area: **{overall.get('strongest_category', '—')}** ({overall.get('strongest_score', '—')}) · Area with most room to improve: **{overall.get('weakest_category', '—')}** ({overall.get('weakest_score', '—')}).")
-    with st.expander("How the overall score is calculated"):
-        st.write(overall.get("calculation", "The existing scoring model combines the five component scores and applies its existing bonuses and job-description penalties."))
-        if overall.get("bonuses"):
-            st.markdown("**Bonuses:** " + ", ".join(f"{name.replace('_', ' ')} (+{points:g})" for name, points in overall["bonuses"].items()))
-        if overall.get("penalties"):
-            st.markdown("**Penalties:** " + ", ".join(f"{name.replace('_', ' ')} (−{points:g})" for name, points in overall["penalties"].items()))
+    overall_content = []
+    if overall.get("calculation"):
+        overall_content.append(f"<p>{escape(str(overall['calculation']))}</p>")
+    if overall.get("bonuses"):
+        bonus_text = ", ".join(
+            f"{escape(str(name).replace('_', ' '))} (+{points:g})"
+            if isinstance(points, (int, float)) else f"{escape(str(name).replace('_', ' '))} ({escape(str(points))})"
+            for name, points in overall["bonuses"].items()
+        )
+        overall_content.append(f"<p><strong>Bonuses:</strong> {bonus_text}</p>")
+    if overall.get("penalties"):
+        penalty_text = ", ".join(
+            f"{escape(str(name).replace('_', ' '))} (−{points:g})"
+            if isinstance(points, (int, float)) else f"{escape(str(name).replace('_', ' '))} ({escape(str(points))})"
+            for name, points in overall["penalties"].items()
+        )
+        overall_content.append(f"<p><strong>Penalties:</strong> {penalty_text}</p>")
+    intro = f"<div class='score-breakdown-overall'>{''.join(overall_content)}</div>" if overall_content else ""
 
-    left, right = st.columns(2)
-    for i, (label, key, max_score, icon) in enumerate(COMPONENTS):
-        value = float(component_scores.get(key, 0))
-        percentage = value / max_score if max_score else 0
-        bar_tone = "is-good" if percentage >= 0.8 else "is-warning" if percentage >= 0.6 else "is-poor"
-
-        with left if i % 2 == 0 else right:
-            st.markdown(f"**{icon} {label}**")
-            st.markdown(
-                f"""
-                <progress class="score-breakdown-progress {bar_tone}" max="1" value="{percentage}"></progress>
-                """,
-                unsafe_allow_html=True,
-            )
-            st.markdown(f"**{value:.0f}/{max_score}**")
-            detail = explanations.get(label)
-            if detail:
-                with st.expander(f"Why {value:.0f}/{max_score}?"):
-                    st.write(detail.get("reason", ""))
-                    deductions = detail.get("deductions") or []
-                    if deductions:
-                        st.markdown("**What affected the score**")
-                        for deduction in deductions:
-                            points = deduction.get("points")
-                            suffix = f" (−{points:g} points)" if isinstance(points, (int, float)) and points else ""
-                            st.markdown(f"- **{deduction.get('item', 'Scoring signal')}**{suffix}: {deduction.get('evidence', '')}")
-                    if detail.get("missing_elements"):
-                        st.markdown("**Missing elements**")
-                        for item in detail["missing_elements"]:
-                            st.markdown(f"- {item}")
-                    if detail.get("suggestions"):
-                        st.markdown("**Ways to improve**")
-                        for item in detail["suggestions"]:
-                            st.markdown(f"- {item}")
-                    if detail.get("evidence"):
-                        st.caption("Signals used: " + "; ".join(str(item) for item in detail["evidence"]))
+    markup = (
+        "<details class='score-breakdown-accordion'>"
+        "<summary>Score Breakdown</summary>"
+        f"<div class='score-breakdown-content'>{intro}{''.join(children)}</div>"
+        "</details>"
+    )
+    st.markdown(markup, unsafe_allow_html=True)
