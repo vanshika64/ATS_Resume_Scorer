@@ -42,6 +42,16 @@ class SkillEvidenceTests(unittest.TestCase):
         self.assertEqual(result[0]["source_name"], "Resume API")
         self.assertEqual(result[0]["evidence"], "Built a resume service using Python and FastAPI.")
 
+    def test_project_technology_stack_and_description_together_support_skill(self):
+        result = classify_skills(
+            ["Python"],
+            [{"title": "ATS Analyzer", "technologies": ["Python", "FastAPI"], "description": "Developed a FastAPI backend for resume parsing and job-description matching."}],
+            [], FakeEmbedder(),
+        )
+        self.assertEqual(result[0]["classification"], "Demonstrated")
+        self.assertIn("technology stack", result[0]["explanation"])
+        self.assertEqual(result[0]["evidence"], "Developed a FastAPI backend for resume parsing and job-description matching.")
+
     def test_listed_without_support_is_listed_only_and_job_gap_is_not_found(self):
         result = classify_skills(["Docker"], [], [], FakeEmbedder(), ["Kubernetes"])
         by_skill = {item["skill"]: item for item in result}

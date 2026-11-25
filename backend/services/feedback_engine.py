@@ -186,9 +186,10 @@ def analyze_issues(
         unsupported_list = ', '.join(unvalidated[:8])
         pct_unsupported = round((len(unvalidated) / total_skills) * 100)
         action_items_skills = [
-            f"Mention '{skill}' in a project or experience bullet point" for skill in unvalidated[:5]
+            f"If you applied '{skill}', describe the specific project or experience activity where you used it; otherwise leave it as a listed skill."
+            for skill in unvalidated[:5]
         ]
-        action_items_skills.append("Remove skills you cannot demonstrate with any project or experience")
+        action_items_skills.append("Keep skills you can discuss; label them as listed skills unless the resume gives a concrete example of using them.")
         if len(unvalidated) > 5:
             action_items_skills.append(f"({len(unvalidated) - 5} more unvalidated skills — review each one)")
         detected.append(IssueDetail(
@@ -203,16 +204,14 @@ def analyze_issues(
             ),
             where_it_appears=f"These skills have no supporting context: {unsupported_list}",
             how_to_fix=(
-                "For each skill in your Skills section, ensure it appears at least "
-                "once in a project description or experience bullet point. "
-                "Describe how and where you used that technology."
+                "For skills you have applied, connect them to a specific project or experience activity. "
+                "A skill appearing only in the Skills section is not evidence of practical use."
             ),
             action_items=action_items_skills,
             example_improvement=(
                 f"Your skill '{unvalidated[0]}' has no supporting evidence.\n\n"
-                f"Fix: Add to a project or experience bullet:\n"
-                f"'Built a data pipeline using {unvalidated[0]} that processed "
-                "[records processed], reducing [manual task]; include a measured change only if you verified it.'"
+                f"If you used it, describe the actual activity, for example:\n"
+                f"'[Action] [specific project feature] using {unvalidated[0]} for [documented purpose].'"
             ),
         ))
 
@@ -274,23 +273,21 @@ def analyze_issues(
             ),
             where_it_appears="Experience section — bullet point content",
             how_to_fix=(
-                "Include verified numbers where they add useful context, such as users served or response time changes. "
-                "revenue generated, lines of code, team size, etc."
+                "Add measurable outcomes only when you observed and can verify them. "
+                "Otherwise, describe the scope, method, or technical result without a number."
             ),
             action_items=[
-                "Go through each bullet point and ask: 'How much?', 'How many?', 'By what %?'",
-                "Add metrics: users served, requests/day, % improvement, team size, time saved",
-                "Use numbers only when you can verify them from records, measurements, or a clear calculation.",
-                "If you do not have a reliable metric, describe the scope, method, or outcome without a number.",
-                "Do not estimate or invent numbers; describe scope and method when you cannot verify a metric.",
+                "Review each experience bullet for an outcome you actually measured.",
+                "Include a number only when you can verify it from records, measurements, or a clear calculation.",
+                "If you do not have a reliable metric, describe the scope, method, or technical outcome without a number.",
             ],
             example_improvement=(
                 "Before:\n"
                 "• Improved application performance\n"
                 "• Managed a team of developers\n\n"
                 "After:\n"
-                "• Improved API response time through Redis caching; add a measured percentage only if you tested and recorded it\n"
-                "• Led a team of 5 developers delivering 3 features per sprint"
+                "• Improved [measured behavior] through [technical change]; include a value only if you tested and recorded it\n"
+                "• Led [team or collaboration, if applicable] to deliver [documented feature or scope]"
             ),
         ))
 

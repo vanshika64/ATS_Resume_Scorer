@@ -25,15 +25,19 @@ def classify_skills(
         if not isinstance(project, dict):
             continue
         label = str(project.get("title") or "Project")
-        # Keep evidence verbatim from the resume description; parsed technology
-        # lists and project titles are useful context but are not proof of use.
+        # The parsed technology stack identifies tools associated with this
+        # project; the description must still show a concrete implementation action.
         body = str(project.get("description") or "")
-        evidence.extend({"source_section": "Project", "source_name": label, "sentence": sentence} for sentence in _sentences(body))
+        technologies = project.get("technologies") or []
+        if isinstance(technologies, str):
+            technologies = re.split(r"[,;|]", technologies)
+        technology_names = [str(value).strip().casefold() for value in technologies if str(value).strip()]
+        evidence.extend({"source_section": "Project", "source_name": label, "sentence": sentence, "technology_skills": technology_names} for sentence in _sentences(body))
     for role in experience or []:
         if not isinstance(role, dict):
             continue
         label = str(role.get("job_title") or role.get("company") or "Experience")
-        evidence.extend({"source_section": "Experience", "source_name": label, "sentence": sentence} for sentence in _sentences(str(role.get("description") or "")))
+        evidence.extend({"source_section": "Experience", "source_name": label, "sentence": sentence, "technology_skills": []} for sentence in _sentences(str(role.get("description") or "")))
 
     listed = list(dict.fromkeys(str(skill).strip() for skill in (skills or []) if str(skill).strip()))
     jd_only = [str(skill).strip() for skill in (job_skills or []) if str(skill).strip() and str(skill).strip().casefold() not in {s.casefold() for s in listed}]
@@ -59,23 +63,30 @@ def classify_skills(
         for sentence_index, item in enumerate(evidence):
             sentence = item["sentence"]
             literal = bool(re.search(r"(?<!\w)" + re.escape(skill) + r"(?!\w)", sentence, re.IGNORECASE))
+            stack_match = skill.casefold() in item.get("technology_skills", [])
             similarity = max(0.0, min(1.0, float(similarities[index, sentence_index])))
-            if literal or similarity >= 0.42:
-                candidates.append((1.0 if literal else similarity, item, literal))
+            if literal or stack_match or similarity >= 0.42:
+                rank = 1.1 if literal else 1.0 if stack_match else similarity
+                candidates.append((rank, item, literal, stack_match, similarity))
         candidates.sort(key=lambda candidate: candidate[0], reverse=True)
-        best_score, best, literal = candidates[0] if candidates else (0.0, None, False)
+        _, best, literal, stack_match, best_similarity = candidates[0] if candidates else (0.0, None, False, False, 0.0)
         application_context = bool(best and re.search(
             r"\b(?:built|build|developed|designed|implemented|deployed|used|applied|created|integrated|automated|tested|maintained|configured|trained|analyzed|analysed|optimized|optimised|migrated|wrote|led|managed|authored|programmed)\b",
             best["sentence"], re.IGNORECASE,
         ))
 
-        if best and best_score >= 0.60 and application_context:
+        if best and (literal or stack_match or best_similarity >= 0.60) and application_context:
             classification = "Demonstrated"
-            explanation = f"The {best['source_section'].lower()} description connects {skill} to a concrete activity."
+            if stack_match and not literal:
+                explanation = f"{skill} is listed in this project's technology stack, and its description documents a concrete implementation activity."
+            else:
+                explanation = f"The {best['source_section'].lower()} description connects {skill} to a concrete activity."
             recommendation = "Keep this example specific; clarify your contribution if it is not already clear."
         elif best:
             classification = "Weak Evidence"
-            if literal and not application_context:
+            if stack_match and not application_context:
+                explanation = f"{skill} appears in the project's technology stack, but the project description does not show how it was applied."
+            elif literal and not application_context:
                 explanation = f"{skill} is mentioned in the {best['source_section'].lower()} description, but the sentence does not clearly describe an action using it."
             else:
                 explanation = f"The {best['source_section'].lower()} contains related language, but the practical use of {skill} is not explicit."
@@ -98,7 +109,7 @@ def classify_skills(
             "source_name": best["source_name"] if best else "",
             "evidence": best["sentence"] if best else "",
             "explanation": explanation,
-            "similarity": round(float(best_score), 3) if best else None,
+            "similarity": round(float(best_similarity), 3) if best else None,
             "recommendation": recommendation,
         })
     return results
